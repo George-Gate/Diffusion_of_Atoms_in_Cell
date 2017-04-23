@@ -1,4 +1,4 @@
-function  mesh  = makeMesh_cubic( xList, yList, zList )
+function  mesh  = makeMesh3D_cubic( xList, yList, zList )
 %Generate a mesh for cubic
 %   xList, yList, zList: vectors giving the partition of x, y, z axis
 
