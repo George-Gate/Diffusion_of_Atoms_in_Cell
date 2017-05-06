@@ -14,7 +14,7 @@ function [ M, MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz, vecQ ] = getCoeff
 % MM, SS, MG, vecQ: matrices for evolution. See documentation
 % 
 %
-use_mex=0;
+use_mex=1;
     switch basis
         case 'Bilinear+Lobatto'
             if use_mex
@@ -39,7 +39,11 @@ use_mex=0;
             matDensity=nnz(MP)/numel(MP);
             if (matDensity*0.5938>0.2)
                 % use full matrix to save memory
-                MG=kron(full(C0),full(MP))+kron(sparse(D0),M);
+                MG=kron(full(C0),full(MP));
+                MG_2=kron(sparse(D0),M);
+                id=find(MG_2);
+                MG(id)=MG(id)+MG_2(id);
+                clear id MG_2
             else
                 MG=kron(sparse(C0),MP)+kron(sparse(D0),M);
             end

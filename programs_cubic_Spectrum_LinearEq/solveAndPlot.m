@@ -5,7 +5,7 @@ parName='parSet2';
 run(parName);
 
 %% simulation parameters
-pars.K=6;
+pars.K=25;
 % meshGrid={[-1;-pars.w;pars.w;1];[-1;-pars.w;pars.w;1];[-1;1]};  % 9 domains
 meshGrid={[-1;1];[-1;1];[-1;1]};  % 1 domain
 % meshGrid={[-1;1];[-1;1];[-1;0;1]};  % 5 domains
@@ -33,7 +33,16 @@ disp([num2str(toc),' s']);
 fprintf('getCoeffs...... ');tic;
 % if strcmp(boundaryType,'firstUniform') || strcmp(boundaryType,'first')
     [ M, MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz ]=getCoeffs3D('Bilinear+Lobatto',mesh0,pars.K,dimRho,pars.funP,pars.matC,pars.alpha*pars.T0*pars.matD,boundaryType);
-    H=-pars.D*SS-MG;
+    if ~issparse(MG) && numel(MG)>1e+9
+        H=MG;
+        clear MG
+        id=find(SS);
+        H(id)=H(id)+pars.D*SS(id);
+        H=-H;
+        clear id
+    else
+        H=-pars.D*SS-MG;
+    end
 % end
 disp([num2str(toc),' s']);
 
@@ -75,7 +84,7 @@ fprintf('Save result to disk...... ');tic;
 filename=[parName,' K=',num2str(pars.K),', T0=',num2str(pars.T0),'  boundary=',boundaryType,'.mat'];
 save(filename,'pars','meshGrid',...
               'mesh0','boundaryType','Nbasis','fun2No','No2fun','getNoByIxyz',...
-              'soltList','u');
+              'soltList','u','-v7.3');
 disp([num2str(toc),' s']);
 
 
@@ -91,6 +100,7 @@ if strcmp(viewDim,'1D')
     %               linspace(-1,1,200),zeros(1,200),-0.99*ones(1,200),'xAxis2';
                    0,0,0,'centerPoint';
                    0.5,0.5,0.5,'(0.5,0.5,0.5)';
+                   1,1,1,'(1,1,1)';
      };
     stmax=pars.T0;
     sNpoints=100;
