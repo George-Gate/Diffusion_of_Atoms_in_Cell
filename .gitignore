@@ -54,3 +54,4 @@ Temporary Items
 programs_cubic_Spectrum_LinearEq/codegen/*
 *.mat
 programs_cubic_Spectrum_LinearEq/figs/*
+*.tmp
