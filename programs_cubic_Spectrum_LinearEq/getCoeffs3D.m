@@ -1,4 +1,4 @@
-function [ MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz_a, vecQ ] = getCoeffs3D( basis, mesh, K, dimRho, P, C0, D0, boundaryType )
+function [ M, MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz, vecQ ] = getCoeffs3D( basis, mesh, K, dimRho, P, C0, D0, boundaryType )
 % Generate Coefficient matrices for FEM
 % [Inputs]
 % basis: 'Bilinear+Lobatto'
@@ -18,9 +18,9 @@ use_mex=0;
     switch basis
         case 'Bilinear+Lobatto'
             if use_mex
-                [Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz_a]=getCoeffs3D_Lobatto_mex( boundaryType, mesh, K );
+                [Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz]=getCoeffs3D_Lobatto_mex( boundaryType, mesh, K );
             else
-                [Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz_a]=getCoeffs3D_Lobatto( boundaryType, mesh, K );
+                [Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz]=getCoeffs3D_Lobatto( boundaryType, mesh, K );
             end
             M=sparse(Mvec(:,1),Mvec(:,2),Mvec(:,3),Nbasis,Nbasis);
             S=sparse(Svec(:,1),Svec(:,2),Svec(:,3),Nbasis,Nbasis);
@@ -33,8 +33,17 @@ use_mex=0;
             ngp=2*K+10;
             MP=calcMP(mesh,P,fun2IntegralID_MP,MPid,K,Nbasis,ngp);
             
+            matStat(MM);matStat(SS);matStat(MP);
+            
             % --------------- calc MG --------------------------
-            MG=kron(sparse(C0),MP)+kron(sparse(D0),M);
+            matDensity=nnz(MP)/numel(MP);
+            if (matDensity*0.5938>0.2)
+                % use full matrix to save memory
+                MG=kron(full(C0),full(MP))+kron(sparse(D0),M);
+            else
+                MG=kron(sparse(C0),MP)+kron(sparse(D0),M);
+            end
+            matStat(MG);
             
             % --------------- calc vecQ ------------------------
             vecQ=zeros(Nbasis*dimRho,1);

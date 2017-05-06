@@ -1,4 +1,4 @@
-function [ Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz_a ] = getCoeffs3D_Lobatto( boundaryType, mesh, K )
+function [ Mvec, Svec, fun2IntegralID_MP, MPid, Nbasis, fun2No, No2fun, getNoByIxyz ] = getCoeffs3D_Lobatto( boundaryType, mesh, K )
 % Generate the coeff matrices for a box area.
 %    Do not support non constant first kind boundary condition so far. 
 % [Inputs]
@@ -145,17 +145,17 @@ if boundaryBasis
 end
 
 % ==================== The following do not read mesh any more ===================================
-% ---------------------------- Create getNoByIxyz_a for heavily speed up ---------------------------------
-getNoByIxyz_a=zeros(K+2,K+2,K+2,Ndomains);
+% ---------------------------- Create getNoByIxyz for heavily speed up ---------------------------------
+getNoByIxyz=zeros(K+2,K+2,K+2,Ndomains);
 for Did=1:Ndomains
     for iz=0:K+1                % x basis for row
         for iy=0:K+1            % y basis for row
             for ix=0:K+1        % z basis for row
-                getNoByIxyz_a(ix+1,iy+1,iz+1,Did)=getNoByIxyz(ix,iy,iz,Did,domainInfo,fun2No);
+                getNoByIxyz(ix+1,iy+1,iz+1,Did)=getNoByIxyz_fun(ix,iy,iz,Did,domainInfo,fun2No);
             end
         end
     end
-end      
+end
 % ---------------------------- Generate Mvec ans Svec --------------------------------------------
 Mvec=zeros(Ndomains*(3*K+8)^3+1,3);
 Svec=zeros(Ndomains*(3*K+8)^3+1,3);
@@ -182,8 +182,8 @@ for Did=1:Ndomains
                     phiphi_y=phiphi(iy,ky,h(2));
                     dphidphi_y=dphidphi(iy,ky,h(2));
                     for iz=0:K+1    % z basis for row
-%                         rowNo=getNoByIxyz(ix,iy,iz,Did,domainInfo,fun2No);
-                        rowNo=getNoByIxyz_a(ix+1,iy+1,iz+1,Did);
+%                         rowNo=getNoByIxyz_fun(ix,iy,iz,Did,domainInfo,fun2No);
+                        rowNo=getNoByIxyz(ix+1,iy+1,iz+1,Did);
                         if (rowNo==0)
                             continue;
                         end
@@ -192,8 +192,8 @@ for Did=1:Ndomains
                             if zeroResult(iz,kz)
                                 continue;
                             end
-%                             colNo=getNoByIxyz(kx,ky,kz,Did,domainInfo,fun2No);
-                            colNo=getNoByIxyz_a(kx+1,ky+1,kz+1,Did);
+%                             colNo=getNoByIxyz_fun(kx,ky,kz,Did,domainInfo,fun2No);
+                            colNo=getNoByIxyz(kx+1,ky+1,kz+1,Did);
                             if (colNo==0)
                                 continue;
                             end
@@ -242,14 +242,14 @@ for Did=1:Ndomains
     for iz=0:K+1                % x basis for row
         for iy=0:K+1            % y basis for row
             for ix=0:K+1        % z basis for row
-%                 rowNo=getNoByIxyz(ix,iy,iz,Did,domainInfo,fun2No);
-                rowNo=getNoByIxyz_a(ix+1,iy+1,iz+1,Did);
+%                 rowNo=getNoByIxyz_fun(ix,iy,iz,Did,domainInfo,fun2No);
+                rowNo=getNoByIxyz(ix+1,iy+1,iz+1,Did);
                 if rowNo==0 ; continue; end
                 for kz=0:K+1    % x basis for column
                     for ky=0:K+1
                         for kx=0:K+1
-%                             colNo=getNoByIxyz(kx,ky,kz,Did,domainInfo,fun2No);
-                            colNo=getNoByIxyz_a(kx+1,ky+1,kz+1,Did);
+%                             colNo=getNoByIxyz_fun(kx,ky,kz,Did,domainInfo,fun2No);
+                            colNo=getNoByIxyz(kx+1,ky+1,kz+1,Did);
                             if colNo==0 ; continue; end
                             MPid(topMP,1)=rowNo;
                             MPid(topMP,2)=colNo;
@@ -268,13 +268,12 @@ end
 % trim MPid
 MPid=MPid(1:topMP-1,:);
 
-% numel(MPintegralList);
 end
 
 % ============================ Private Functions =======================================
 
 % given subid_x/y/z and domain id, return the relevant basis No.
-function No=getNoByIxyz(subx,suby,subz,Did,domainInfo,fun2No)
+function No=getNoByIxyz_fun(subx,suby,subz,Did,domainInfo,fun2No)
     No=0;
     type=sum([subx<=1;suby<=1;subz<=1]);
     if (type==3)  % node basis
