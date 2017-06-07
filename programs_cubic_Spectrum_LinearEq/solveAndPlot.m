@@ -123,18 +123,22 @@ disp([num2str(toc),' s']);
 resultPlotter( sol, pars, combinedTime );
 
 %% get analytical solution
-anaSol_diff.sampleDim='1D';
-for Lid=1:length(sol.tag)
-    px=sol.xList{Lid};py=sol.yList{Lid};pz=sol.zList{Lid};
-    anaSol_diff.tag{Lid}=sol.tag{Lid};
-    anaSol_diff.xList{Lid}=px;
-    anaSol_diff.yList{Lid}=py;
-    anaSol_diff.zList{Lid}=pz;
-    anaSol_diff.rho{Lid}=zeros(1,length(combinedTime),pars.dimRho);
-    for kkk=1:length(combinedTime)
-        anaSol_diff.rho{Lid}(1,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px,py),1,1,pars.dimRho)-sol.rho{Lid}(1,kkk,:);
-%         anaSol_diff.rho{Lid}(1,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px,py),1,1,pars.dimRho);
+if strcmp(sol.sampleDim,'1D')
+    anaSol_diff.sampleDim='1D';
+    for Lid=1:length(sol.tag)
+        px=sol.xList{Lid};py=sol.yList{Lid};pz=sol.zList{Lid};
+        anaSol_diff.tag{Lid}=[sol.tag{Lid},'(diff with anaSol)'];
+        anaSol_diff.xList{Lid}=px;
+        anaSol_diff.yList{Lid}=py;
+        anaSol_diff.zList{Lid}=pz;
+        anaSol_diff.rho{Lid}=zeros(length(px),length(combinedTime),pars.dimRho);
+        for kkk=1:length(combinedTime)
+            for ipx=1:length(px)
+                anaSol_diff.rho{Lid}(ipx,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px(ipx),py(ipx)),1,1,pars.dimRho)-sol.rho{Lid}(ipx,kkk,:);
+    %            anaSol_diff.rho{Lid}(ipx,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px(ipx),py(ipx)),1,1,pars.dimRho);
+            end
+        end
     end
+    resultPlotter( anaSol_diff, pars, combinedTime );
+    close;
 end
-resultPlotter( anaSol_diff, pars, combinedTime );
-close;
