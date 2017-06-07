@@ -47,20 +47,44 @@ if strcmp(sol.sampleDim,'1D')
         xlabel('time/s');
         title('sum(\rho_i)');
         % average s_z
-%         subplot(3,4,10);
-%         len_s=size(sol.rho{Lid},1);len_t=size(sol.rho{Lid},2);
-%         mesh(tList*pars.T0,xiList,sum(sol.rho{Lid}(:,:,1:8).*repmat(reshape(-3.5:3.5,1,1,8),len_s,len_t,1),3));
-%         view([0 90]);box on;colormap winter;colorbar;
-%         set(gca,'xlim',pars.T0*[min(timeList),max(timeList)]);
-%         xlabel('time/s');ylabel('$$\xi$$','interpreter','latex');zlabel('Average S_z');
-%         title('<S_z>');
+        if isscalar(sol.xList{Lid})
+            % 0D plot
+            subplot(3,4,10);
+            len_s=size(sol.rho{Lid},1);len_t=size(sol.rho{Lid},2);
+            plot(tList*pars.T0,8*sum(sol.rho{Lid}(:,:,1:5).*repmat(reshape(-2:2,1,1,5),len_s,len_t,1),3));
+            box on;
+            set(gca,'xlim',pars.T0*[min(timeList),max(timeList)]);
+            xlabel('time/s');ylabel('Average F_z');
+            title('$$\langle F_z \rangle/\hbar \quad (\rho_1 - \rho_5)$$','interpreter','latex');
+            subplot(3,4,11);
+            plot(tList*pars.T0,8*sum(sol.rho{Lid}(:,:,6:8).*repmat(reshape(-1:1,1,1,3),len_s,len_t,1),3));
+            box on;
+            set(gca,'xlim',pars.T0*[min(timeList),max(timeList)]);
+            xlabel('time/s');ylabel('Average F_z');
+            title('$$\langle F_z \rangle/\hbar \quad (\rho_6 - \rho_8)$$','interpreter','latex');
+        else  % 1D plot
+            subplot(3,4,10);
+            len_s=size(sol.rho{Lid},1);len_t=size(sol.rho{Lid},2);
+            mesh(tList*pars.T0,xiList,8*sum(sol.rho{Lid}(:,:,1:5).*repmat(reshape(-2:2,1,1,5),len_s,len_t,1),3));
+            view([0 90]);box on;colormap winter;colorbar;
+            set(gca,'xlim',pars.T0*[min(timeList),max(timeList)]);
+            title('$$\langle F_z \rangle/\hbar \quad (\rho_1 - \rho_5)$$','interpreter','latex');
+            title('$$<F_z>/\hbar (\rho_1 -- \rho_5)$$','interpreter','latex');
+            subplot(3,4,11);
+            mesh(tList*pars.T0,xiList,8*sum(sol.rho{Lid}(:,:,6:8).*repmat(reshape(-1:1,1,1,3),len_s,len_t,1),3));
+            view([0 90]);box on;colormap winter;colorbar;
+            set(gca,'xlim',pars.T0*[min(timeList),max(timeList)]);
+            xlabel('time/s');ylabel('$$\xi$$','interpreter','latex');zlabel('Average F_z');
+            title('$$\langle F_z \rangle/\hbar \quad (\rho_6 - \rho_8)$$','interpreter','latex');
+        end
         % annotation
         annotation('textbox','String',...
            {['\rho(t)-\rho(0),  K=',num2str(pars.K),'  T_0=',num2str(pars.T0)],...
             ['Sampling Line ',num2str(Lid),': ',sol.tag{Lid}]}...
-                  ,'Position',[0.55 0.21 0.1 0.1]);
+                  ,'Position',[0.75 0.21 0.1 0.1]);
         pause(0.01);
     end
+    % plot sampling lines
     figure();
     for Lid=1:length(sol.tag)
         if isscalar(sol.xList{Lid})
@@ -73,6 +97,7 @@ if strcmp(sol.sampleDim,'1D')
     legend(sol.tag{:});
     title('Sampling Lines');box on;
     xlabel('x');ylabel('y');zlabel('z');
+    set(gca,'xlim',[-1,1],'ylim',[-1,1],'zlim',[-1,1]);
 % plot3D
 elseif strcmp(sol.sampleDim,'3D')
     hf=figure('position',[1426 82 1811 533]);

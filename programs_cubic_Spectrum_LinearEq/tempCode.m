@@ -17,7 +17,7 @@
 tic;
 tid=[100];
 combinedTime=reshape(tList(tid),length(tid),1);
-sol=combineSolution( u(tid,:), '3D', mesh0, getNoByIxyz_a, K, Nbasis, dimRho, 100 );
+sol=combineSolution( u(tid,:), '3D', mesh0, getNoByIxyz, K, Nbasis, dimRho, 100 );
 toc;
 
 

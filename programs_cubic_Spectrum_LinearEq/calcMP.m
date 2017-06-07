@@ -27,14 +27,23 @@ function [MP, gp_x, gw, phi_num] = calcMP( mesh,funP,fun2IntegralID_MP,MPid,K,Nb
     end
 % -------------- Combine MP -----------------------------------
     MPvec=IntegralList_MP(MPid(:,3)).*IntegralList_MP(MPid(:,4)).*IntegralList_MP(MPid(:,5));
-    if (mesh.Ndomains<63)
+    % any element that smaller than eps_MP will be ignored.
+    eps_MP=max(abs(MPvec))*1e-17;
+    id=abs(MPvec)>eps_MP;
+    MPvec=MPvec(id);
+    MPid=MPid(id,1:2);
+    clear id
+    % matDensity*0.5938>0.2
+%     if (mesh.Ndomains<63)
+    matDensity=length(MPvec)/Nbasis/Nbasis;
+    if (matDensity*0.5938>0.2)
         MP=vec2full(MPid(:,1),MPid(:,2),MPvec,Nbasis,Nbasis);
     else
         MP=sparse(MPid(:,1),MPid(:,2),MPvec,Nbasis,Nbasis);
     end
-    if (mesh.Ndomains>5)
-        MP=sparse(MP);
-    end
+%     if (mesh.Ndomains>5)
+%         MP=sparse(MP);
+%     end
 %     toc;tic;
 %     MP2=sparse(MPid(:,1),MPid(:,2),MPvec,Nbasis,Nbasis);
 %     toc;

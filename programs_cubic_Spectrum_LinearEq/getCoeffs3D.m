@@ -14,7 +14,7 @@ function [ M, MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz, vecQ ] = getCoeff
 % MM, SS, MG, vecQ: matrices for evolution. See documentation
 % 
 %
-use_mex=1;
+use_mex=0;
     switch basis
         case 'Bilinear+Lobatto'
             if use_mex

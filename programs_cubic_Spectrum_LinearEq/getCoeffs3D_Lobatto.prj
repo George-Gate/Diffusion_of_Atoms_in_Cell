@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="3850078647" file="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto.prj" location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq" name="getCoeffs3D_Lobatto" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="449720843" file="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto.prj" location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq" name="getCoeffs3D_Lobatto" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -41,7 +41,7 @@
       <param.CompileTimeRecursionLimit>50</param.CompileTimeRecursionLimit>
       <param.EnableRuntimeRecursion>true</param.EnableRuntimeRecursion>
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
-      <param.TargetLang>option.TargetLang.CPP</param.TargetLang>
+      <param.TargetLang>option.TargetLang.C</param.TargetLang>
       <param.EchoExpressions>true</param.EchoExpressions>
       <param.InlineThreshold>10</param.InlineThreshold>
       <param.InlineThresholdMax>200</param.InlineThresholdMax>
@@ -750,7 +750,7 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen\mex\getCoeffs3D_Lobatto</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>531437973</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>679394824</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen\mex\getCoeffs3D_Lobatto</var.cfi.lastOutputRoot>
     <var.cfi.preBuildChecksum>487298239</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>getCoeffs3D_Lobatto('firstUniform',mesh0,3)</var.lastCfiTestSnippet>

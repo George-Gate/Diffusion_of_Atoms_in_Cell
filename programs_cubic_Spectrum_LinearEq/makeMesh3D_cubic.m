@@ -1,5 +1,5 @@
 function  mesh  = makeMesh3D_cubic( xList, yList, zList )
-%Generate a mesh for cubic
+%Generate a mesh for cubic domain
 %   xList, yList, zList: vectors giving the partition of x, y, z axis
 
     % check if xList, yList and zList is ascending

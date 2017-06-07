@@ -1,9 +1,10 @@
 % parameter set 1
 clear pars
 
-pars.w=200000;   % uniform laser
+pars.w=0.2;   % laser beam
 pars.D_ph=0;  % no diffusion
-pars.T0=5;
+pars.T0=20;
+pars.P0=0;
 
 initPars;
 

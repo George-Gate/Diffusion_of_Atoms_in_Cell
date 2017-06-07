@@ -5,7 +5,7 @@ parName='parSet2';
 run(parName);
 
 %% simulation parameters
-pars.K=25;
+pars.K=10;
 % meshGrid={[-1;-pars.w;pars.w;1];[-1;-pars.w;pars.w;1];[-1;1]};  % 9 domains
 meshGrid={[-1;1];[-1;1];[-1;1]};  % 1 domain
 % meshGrid={[-1;1];[-1;1];[-1;0;1]};  % 5 domains
@@ -33,7 +33,9 @@ disp([num2str(toc),' s']);
 fprintf('getCoeffs...... ');tic;
 % if strcmp(boundaryType,'firstUniform') || strcmp(boundaryType,'first')
     [ M, MM, SS, MG, Nbasis, fun2No, No2fun, getNoByIxyz ]=getCoeffs3D('Bilinear+Lobatto',mesh0,pars.K,dimRho,pars.funP,pars.matC,pars.alpha*pars.T0*pars.matD,boundaryType);
-    if ~issparse(MG) && numel(MG)>1e+9
+    if ~issparse(MG)
+        % use in situ update to save memory
+        % H will be full matrix.
         H=MG;
         clear MG
         id=find(SS);
@@ -41,11 +43,14 @@ fprintf('getCoeffs...... ');tic;
         H=-H;
         clear id
     else
+        % H will be sparse matrix
+        % for dense matrix, full matrix is much faster than sparse matrix
         H=-pars.D*SS-MG;
     end
 % end
 disp([num2str(toc),' s']);
 
+% H=full(H);
 
 % boundary
 fprintf('Set boundary...... ');tic;
@@ -70,8 +75,9 @@ disp([num2str(toc),' s']);
 
 %% time evolution
 fprintf('Time evolution...... ');tic;
-opts=odeset('Mass',MM,'MaxStep',0.1/pars.T0);
-t_span=linspace(0,1,500*pars.T0+1);
+opts=odeset('Mass',MM,'MaxStep',0.1/pars.T0,'InitialStep',1e-6/pars.T0);
+ptsPerSecond=50;
+t_span=linspace(0,1,ptsPerSecond*pars.T0+1);
 [soltList,u] = ode45(@(t,u)H*u-Gf,t_span,u_0,opts);
 disp([num2str(toc),' s']);
 
@@ -84,7 +90,7 @@ fprintf('Save result to disk...... ');tic;
 filename=[parName,' K=',num2str(pars.K),', T0=',num2str(pars.T0),'  boundary=',boundaryType,'.mat'];
 save(filename,'pars','meshGrid',...
               'mesh0','boundaryType','Nbasis','fun2No','No2fun','getNoByIxyz',...
-              'soltList','u','-v7.3');
+              'soltList','u','ptsPerSecond','-v7.3');
 disp([num2str(toc),' s']);
 
 
@@ -95,16 +101,16 @@ viewDim='1D';
 if strcmp(viewDim,'1D')
     samplingLines={
     %               linspace(-1,1,200),zeros(1,200),zeros(1,200),'xAxis';
-    %               zeros(1,200),linspace(-1,1,200),zeros(1,200),'yAxis';
+                  zeros(1,200),linspace(-1,1,200),zeros(1,200),'yAxis';
     %               zeros(1,200),zeros(1,200),linspace(-1,1,200),'zAxis';
     %               linspace(-1,1,200),zeros(1,200),-0.99*ones(1,200),'xAxis2';
-                   0,0,0,'centerPoint';
-                   0.5,0.5,0.5,'(0.5,0.5,0.5)';
-                   1,1,1,'(1,1,1)';
+%                    0,0,0,'centerPoint';
+%                    0.5,0.5,0.5,'(0.5,0.5,0.5)';
+%                    1,1,1,'(1,1,1)';
      };
     stmax=pars.T0;
     sNpoints=100;
-    tid=[1:max(1,round(500*stmax/sNpoints)):500*stmax,500*stmax+1];
+    tid=[1:max(1,round(ptsPerSecond*stmax/sNpoints)):ptsPerSecond*stmax,ptsPerSecond*stmax+1];
     sol=combineSolution( u(tid,:), '1D', mesh0, getNoByIxyz, pars.K, Nbasis, dimRho, samplingLines);
 elseif strcmp(viewDim,'3D')
     tid=125;
@@ -127,6 +133,7 @@ for Lid=1:length(sol.tag)
     anaSol_diff.rho{Lid}=zeros(1,length(combinedTime),pars.dimRho);
     for kkk=1:length(combinedTime)
         anaSol_diff.rho{Lid}(1,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px,py),1,1,pars.dimRho)-sol.rho{Lid}(1,kkk,:);
+%         anaSol_diff.rho{Lid}(1,kkk,:)=reshape(anaSol(pars.rho_0,combinedTime(kkk),px,py),1,1,pars.dimRho);
     end
 end
 resultPlotter( anaSol_diff, pars, combinedTime );
