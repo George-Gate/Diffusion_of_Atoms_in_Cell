@@ -1,0 +1,14 @@
+Possible function that is needed:
+
+    basisInnerProduct(fun): return the inner product (v_i,fun) for all base function v_i
+    baseNumbering : to generate a global number for all base. Gives getNoByIxyz, fun2No, No2fun
+    
+arbitary basis functions, only require that the basis should have a direct product form: v_i(x,y,z)=A(x)B(y)C(z)
+    
+struct speedUp: to record information that can accelerate calculation
+    speedUp.baseOrder: record the order of each base, can be used to cut loops when calc inner product
+    speedUp.crossBand: the width that (phi_i,phi_k) may be non-zero
+    speedUp.defaultFunOrder: the maximum order of functions that used as initial/boundary conditions, will be used to set the default number of gauss points when 
+                             calculating integrals with qgauss.
+
+

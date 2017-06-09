@@ -4,7 +4,7 @@ function  mesh  = makeMesh3D_cubic( xList, yList, zList )
 
     % check if xList, yList and zList is ascending
     if min(diff(xList))<0 || min(diff(yList))<0 || min(diff(zList))<0
-        warning('xList, yList and zList must be ascending, sort then automatically.');
+        %warning('xList, yList and zList must be ascending, sort then automatically.');
         if min(diff(xList))<0
             xList=sort(xList);
         end
@@ -145,7 +145,7 @@ function  mesh  = makeMesh3D_cubic( xList, yList, zList )
                                                 mesh.nodes.y(n(1,1,1)), mesh.nodes.y(n(2,2,2)) ;
                                                 mesh.nodes.z(n(1,1,1)), mesh.nodes.z(n(2,2,2)) ];
                 mesh.domains.h(:,topD)=mesh.domains.xyz(:,2,topD)-mesh.domains.xyz(:,1,topD);
-                clear n
+                %clear n
                 topD=topD+1;
             end
         end
