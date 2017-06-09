@@ -55,6 +55,19 @@ classdef MeshPars
         function NN=get.numMeshDomains(obj)
             NN=sum(obj.Nx)*sum(obj.Ny)*sum(obj.Nz);
         end
+        
+        % define == operator for this class
+        function result=eq(obj1,obj2)
+            if ~isa(obj1,'PumpingDiffusionFEMSolver.MeshPars') || ~isa(obj2,'PumpingDiffusionFEMSolver.MeshPars')
+                result = false;
+            else
+                if isequal(obj1.xList,obj2.xList) && isequal(obj1.yList,obj2.yList) && isequal(obj1.zList,obj2.zList)
+                    result = true;
+                else
+                    result = false;
+                end
+            end
+        end
     end
     
 end
@@ -66,13 +79,17 @@ function checkDump(val)
             error('One point should not appear twice!');
         end
     end
+    % check the range of coordinates. If they are not [-1,1], give warning.
+    if (abs(val(1)+1)>eps || abs(val(end)-1)>eps)
+        warning('The mesh domain should be [-1,1]^3, otherwise FEM solver may return wrong solution.');
+    end
 end
 
 
 function coList=makeAxisList(Ps,N,axisName)
     % check the length of majorPoint and N
     if (length(Ps) ~= length(N)+1)
-        error(['Input should satisties length(',axisName,'Major) == length(N',axisName,') + 1.']);
+        error(['Input should satisfies length(',axisName,'Major) == length(N',axisName,') + 1.']);
     end
     coList=0;
     for i=1:length(N)
