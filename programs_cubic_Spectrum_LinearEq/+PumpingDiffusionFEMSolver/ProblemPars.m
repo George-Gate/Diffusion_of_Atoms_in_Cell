@@ -27,7 +27,9 @@ classdef ProblemPars
     methods
         function obj=ProblemPars(filename)
             if nargin==0
-                filename='+PumpingDiffusionFEMSolver\DiffusionFEM.mat';
+                C=metaclass(obj);
+                s=what(C.ContainingPackage.Name);
+                filename=[s.path,'\DiffusionFEM.mat'];
             end
             diffPar=load(filename);
             obj.matC=diffPar.matC;

@@ -53,27 +53,35 @@ classdef Mesh3D < handle
         
         
         % generate mesh
-        function makeMesh(obj)
-            startT=tic;
-            import PumpingDiffusionFEMSolver.Mesh3D
-            % call function makeMesh3D_cubic() to get mesh structure
-            if obj.use_mex
-                mesh0=Mesh3D.makeMesh3D_cubic_mex(obj.meshPars.xList,  obj.meshPars.yList,  obj.meshPars.zList);
-            else
-                mesh0=Mesh3D.makeMesh3D_cubic(obj.meshPars.xList,  obj.meshPars.yList,  obj.meshPars.zList);
+        function makeMesh(obj,forceRegenerate)
+            if nargin<2
+                forceRegenerate=false;
             end
-            % save mesh structure
-            obj.nodes=mesh0.nodes;
-            obj.edges=mesh0.edges;
-            obj.surfaces=mesh0.surfaces;
-            obj.domains=mesh0.domains;
-            obj.Nnodes=mesh0.Nnodes;
-            obj.Nedges=mesh0.Nedges;
-            obj.Nsurfaces=mesh0.Nsurfaces;
-            obj.Ndomains=mesh0.Ndomains;
-            % set meshPars_current
-            obj.meshPars_current=obj.meshPars;
-            disp(['Time used to generate mesh: ',sec2hms(toc(startT))]);
+            if forceRegenerate || obj.outDated
+                startT=tic;
+                import PumpingDiffusionFEMSolver.Mesh3D
+                % call function makeMesh3D_cubic() to get mesh structure
+                if obj.use_mex
+                    mesh0=Mesh3D.makeMesh3D_cubic_mex(obj.meshPars.xList,  obj.meshPars.yList,  obj.meshPars.zList);
+                else
+                    mesh0=Mesh3D.makeMesh3D_cubic(obj.meshPars.xList,  obj.meshPars.yList,  obj.meshPars.zList);
+                end
+                % save mesh structure
+                obj.nodes=mesh0.nodes;
+                obj.edges=mesh0.edges;
+                obj.surfaces=mesh0.surfaces;
+                obj.domains=mesh0.domains;
+                obj.Nnodes=mesh0.Nnodes;
+                obj.Nedges=mesh0.Nedges;
+                obj.Nsurfaces=mesh0.Nsurfaces;
+                obj.Ndomains=mesh0.Ndomains;
+                % set meshPars_current
+                obj.meshPars_current=obj.meshPars;
+                disp(['Time used to generate mesh: ',sec2hms(toc(startT))]);
+            else
+                % meshPars not changed, skip
+                disp('meshPars wasn''t changed since last makeMesh. Use .makeMesh(1) to force regenerate.');
+            end
         end
         
         % Visualize mesh
