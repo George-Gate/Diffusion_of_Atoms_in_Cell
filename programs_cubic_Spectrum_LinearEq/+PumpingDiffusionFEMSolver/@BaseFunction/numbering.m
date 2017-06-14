@@ -7,7 +7,9 @@ function Nbasis=numbering( obj,mesh,maxOrder )
     if maxOrder<2
         error('maxOrder should be at least 2.');
     end
-
+    
+    startT=tic;
+    
     K=maxOrder-2;
 % ----------------------- Set fun2No and No2fun -------------------------------------------
     NBnode=mesh.Nnodes;
@@ -114,6 +116,10 @@ function Nbasis=numbering( obj,mesh,maxOrder )
     obj.meshPars=mesh.meshPars_current;
     obj.maxOrder=maxOrder;    % set maxOrder property to allow other methods to create cache for speed up.
     obj.Nbasis=Nbasis;
+    
+    import PumpingDiffusionFEMSolver.library.sec2hms;
+    disp(['Time used to generate base numbering: ',sec2hms(toc(startT))]);
+    
 end
 
 

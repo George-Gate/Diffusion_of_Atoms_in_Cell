@@ -20,7 +20,7 @@ classdef Mesh3D < handle
     end
     
     properties(Dependent, SetAccess=private)
-        outDated;     % indicate whether the current mesh is generated from current meshPars.
+        outdated;     % indicate whether the current mesh is generated from current meshPars.
     end
 
     
@@ -47,7 +47,7 @@ classdef Mesh3D < handle
                 error('Input should be an object of class @PumpingDiffusionFEMSolver.MeshPars');
             end
         end
-        function val=get.outDated(obj)
+        function val=get.outdated(obj)
             val= ~(obj.meshPars_current == obj.meshPars );
         end
         
@@ -57,7 +57,7 @@ classdef Mesh3D < handle
             if nargin<2
                 forceRegenerate=false;
             end
-            if forceRegenerate || obj.outDated
+            if forceRegenerate || obj.outdated
                 startT=tic;
                 import PumpingDiffusionFEMSolver.Mesh3D
                 % call function makeMesh3D_cubic() to get mesh structure
@@ -77,6 +77,7 @@ classdef Mesh3D < handle
                 obj.Ndomains=mesh0.Ndomains;
                 % set meshPars_current
                 obj.meshPars_current=obj.meshPars;
+                import PumpingDiffusionFEMSolver.library.sec2hms;
                 disp(['Time used to generate mesh: ',sec2hms(toc(startT))]);
             else
                 % meshPars not changed, skip

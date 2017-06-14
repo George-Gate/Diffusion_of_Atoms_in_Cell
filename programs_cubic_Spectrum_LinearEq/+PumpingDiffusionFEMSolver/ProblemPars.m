@@ -13,13 +13,13 @@ classdef ProblemPars
         rho_0;      % initial condition
         rho_b;      % boundary condition (first kind)
         drho_b;     % boundary condition (second kind)
-        boundaryType; % boundary type, one of first, firstUniform, second, secondZero.
+        boundaryType; % boundary type, one of first, second, robin.
         anaSolForm; % analytical solution (if available)
     end
     
     properties(Dependent)
         dimRho;     % dimension of rho
-        funP;       % 
+        funP;       % the spatial distribution of laser power
         D;          % the diffusion coefficient D for the dimensionless PDE
         anaSol;     % analytical solution (if anaSolForm is set)
     end
@@ -34,10 +34,11 @@ classdef ProblemPars
             diffPar=load(filename);
             obj.matC=diffPar.matC;
             obj.matD=diffPar.matD;
-            obj.boundaryType='firstUniform';
+            obj.boundaryType='first';
             dimRho=size(obj.matD,1);
             obj.rho_b=ones(dimRho,1)/8/dimRho;
             obj.rho_0=ones(dimRho,1)/8/dimRho;
+            anaSolForm=@(obj,t,x,y,z)0;
         end
         
         function dimRho=get.dimRho(obj)
@@ -55,7 +56,19 @@ classdef ProblemPars
             anaSol=@(t,x,y,z)obj.anaSolForm(obj,t,x,y,z);
         end
         function obj=set.anaSolForm(obj,fun)  % !!!!! this part not finished
-            obj.anaSolForm=fun;               % fun should be a function of obj....
+            if isa(fun,'function_handle') && nargin(fun)==5
+                obj.anaSolForm=fun;               % fun should be a function of obj....
+            else
+                error('fun should be a function handle: fun=@(obj,t,x,y,z)...');
+            end
+        end
+        function obj=set.boundaryType(obj,val)
+            validType={'first','second','robin'};
+            if ismember(val,validType)
+                obj.boundaryType=val;
+            else
+                error(['Unknow boundary type: ',val,'. Possible types are: ',strjoin(validType)]);
+            end
         end
     end
     

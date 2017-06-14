@@ -40,9 +40,9 @@ classdef BaseFunction < handle
         vecF=projection(obj,fun,maxOrder,ngp);       % vecF is a [maxOrder x 1] column vector with vecF_i=(v_i,fun)
         % weightFun and fun should be function handles with only one input argument
         % Input argument 'ngp' is optional. It tell the method how many gauss point should be used to calc numerical intergrals.
-        % If ngp is not given, the default value is ngp=2*maxOrder+10 for innerProduct() and ngp=maxOrder+10 for projection().
+        % If ngp is not given, the default value is ngp=2*maxOrder+100 for innerProduct() and ngp=maxOrder+100 for projection().
         % Example for using:
-        % projection(@(x)funFileName(a,b,c,x),  K+1)
+        % projection(@(x)funFileName(a,b,c,x),  K)
         
         %----------------------------------------------------------------------------------------------------------
         Nbasis=numbering(obj,mesh,maxOrder);  % Generate the global No. of each base for a given @Mesh3D object.

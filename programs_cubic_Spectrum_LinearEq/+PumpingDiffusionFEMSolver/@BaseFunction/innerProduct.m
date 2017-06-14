@@ -3,9 +3,9 @@ function [ M ] = innerProduct( obj,weightFun,maxOrder,ngp )
 %   M is a [maxOrder x maxOrder] matrix with M_ik=(v_i,weightFun*v_k)
 %   weightFun should be function handles with only one input argument
 %   Input argument 'ngp' is optional. It tell the method how many gauss point should be used to calc numerical intergrals.
-%   If ngp is not given, the default value is ngp=2*maxOrder+10 .
+%   If ngp is not given, the default value is ngp=2*maxOrder+100 .
     if nargin<4
-        ngp=2*maxOrder+10;
+        ngp=2*maxOrder+100;
     end
     % check the form of weightFun
     if ~(isa(weightFun,'function_handle') &&  nargin(weightFun)==1)

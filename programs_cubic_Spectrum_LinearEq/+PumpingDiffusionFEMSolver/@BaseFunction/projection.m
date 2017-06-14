@@ -3,10 +3,10 @@ function [ vecF ] = projection( obj,fun,maxOrder,ngp )
 %   vecF is a [maxOrder x 1] column vector with vecF_i=(v_i,fun)
 %   fun should be function handles with only one input argument
 %   Input argument 'ngp' is optional. It tell the method how many gauss point should be used to calc numerical intergrals.
-%   If ngp is not given, the default value is ngp=maxOrder+10.
+%   If ngp is not given, the default value is ngp=maxOrder+100.
 
     if nargin<4
-        ngp=maxOrder+10;
+        ngp=maxOrder+100;
     end
     % check the form of fun
     if ~(isa(fun,'function_handle') &&  nargin(fun)==1)
