@@ -12,3 +12,6 @@ struct speedUp: to record information that can accelerate calculation
                              calculating integrals with qgauss.
 
 
+
+DEBUG:
+Forget to scale the scope of Lobatto function? e.g. when calc intergrals, use interval [-1,1], but forget to times some factor for scaling.
