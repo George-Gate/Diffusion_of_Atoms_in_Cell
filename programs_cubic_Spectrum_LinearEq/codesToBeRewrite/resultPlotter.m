@@ -1,5 +1,5 @@
 function [  ] = resultPlotter( sol, pars, timeList )
-% Plot solutions returned be combineSolution()
+% Plot solutions returned by combineSolution()
 %   sol - returned by combineSolution()
 %   pars - parameters used to solve equation
 %   samplingLines - samplingLines 

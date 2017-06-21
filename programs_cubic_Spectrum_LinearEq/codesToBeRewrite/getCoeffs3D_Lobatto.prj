@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="449720843" file="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto.prj" location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq" name="getCoeffs3D_Lobatto" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="2691544246" file="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\codesToBeRewrite\getCoeffs3D_Lobatto.prj" location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\codesToBeRewrite" name="getCoeffs3D_Lobatto" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -27,7 +27,7 @@
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
-      <param.VerificationStatus>option.VerificationStatus.Passed</param.VerificationStatus>
+      <param.VerificationStatus>option.VerificationStatus.FailedTest</param.VerificationStatus>
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -720,7 +720,7 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>generateCode</param.WorkflowStep>
+    <param.WorkflowStep>verifyCompatibility</param.WorkflowStep>
     <param.TestSnippets>
       <item>getCoeffs3D_Lobatto('firstUniform',mesh0,3)</item>
       <item>getCoeffs3D_Lobatto('firstConstant',mesh0,3)</item>
@@ -752,11 +752,11 @@
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
     <var.gc.preBuildChecksum>679394824</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen\mex\getCoeffs3D_Lobatto</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>487298239</var.cfi.preBuildChecksum>
+    <var.cfi.preBuildChecksum>3710756867</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>getCoeffs3D_Lobatto('firstUniform',mesh0,3)</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
     <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;1088901257&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\codesToBeRewrite\getCoeffs3D_Lobatto.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
@@ -1019,7 +1019,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq" name="getCoeffs3D_Lobatto_mex.mexw64" optional="false">Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\getCoeffs3D_Lobatto_mex.mexw64</file>
+      <file location="Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\codesToBeRewrite" name="getCoeffs3D_Lobatto_mex.mexw64" optional="false">Y:\当前工作文件\2016-12-29 核磁共振陀螺仪\0. programs\2. Diffusion of Atoms in Cell\programs_cubic_Spectrum_LinearEq\codesToBeRewrite\getCoeffs3D_Lobatto_mex.mexw64</file>
     </build-deliverables>
     <workflow />
     <matlab>

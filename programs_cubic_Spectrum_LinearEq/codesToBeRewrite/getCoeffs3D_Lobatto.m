@@ -25,7 +25,7 @@ else
     error(['Unknow boundary type: ',boundaryType]);
     boundaryBasis=0;
 end
-% set fun2No and No2fun
+% set fun2No and No2fun 
 if (boundaryBasis)
     NBnode=mesh.Nnodes;
     NBedge=mesh.Nedges*K;
