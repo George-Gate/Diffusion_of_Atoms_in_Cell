@@ -58,14 +58,17 @@ function [  ] = genCoeffs( obj )
             startT=tic;
             obj.genCBvecR();
             disp(['Time used to generate CB and vecR: ',sec2hms(toc(startT))]);
+            matStat(obj.vecR,'vecR');matStat(obj.CB,'CB');
         case 'second'
             startT=tic;
             obj.genVecQ();
             disp(['Time used to generate vecQ: ',sec2hms(toc(startT))]);
+            matStat(obj.vecQ,'vecQ');
         case 'robin'
             startT=tic;
             obj.genMABvecF();
             disp(['Time used to generate MAB and vecF: ',sec2hms(toc(startT))]);
+            matStat(obj.MAB,'MAB');matStat(obj.vecF,'vecF');
         otherwise
             error(['Unknow boundary type: ',obj.problemPars.boundaryType]);
     end

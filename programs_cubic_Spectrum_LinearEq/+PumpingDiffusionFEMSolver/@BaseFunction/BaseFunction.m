@@ -1,4 +1,4 @@
-classdef BaseFunction < handle
+classdef BaseFunction < handle & matlab.mixin.Copyable
     %BaseFunction  The super calss of all base function class.
     %  All base function should be real valued functions defined on [-1,1]. 
     %  (f,g) denotes the inner product of function f(x) and g(x) on [-1,1]
@@ -22,6 +22,12 @@ classdef BaseFunction < handle
         %-------------------------------------------------
     end
     
+    properties(Access=public)
+        gp_x;    % history of gauss point, for speed up
+        gw;
+        gHisLen;
+    end
+    
     methods(Abstract,Static)
         val=funVal(xList,i); % return v_i(xList). i and xList are vectors. i should be positive integers.
         % If xList is a row vector, then val is a [length(i) x length(xList)] matrix.
@@ -36,6 +42,13 @@ classdef BaseFunction < handle
     end
     
     methods
+        function obj=BaseFunction()
+            % init gauss point history container
+            obj.gHisLen=401;  % history length
+            obj.gp_x=cell(obj.gHisLen,1);
+            obj.gw=cell(obj.gHisLen,1);
+        end
+        
         M=innerProduct(obj,weightFun,maxOrder,ngp);  % M is a [maxOrder x maxOrder] matrix with M_ik=(v_i,weightFun*v_k)
         vecF=projection(obj,fun,maxOrder,ngp);       % vecF is a [maxOrder x 1] column vector with vecF_i=(v_i,fun)
         % weightFun and fun should be function handles with only one input argument
@@ -43,7 +56,7 @@ classdef BaseFunction < handle
         % If ngp is not given, the default value is ngp=2*maxOrder+100 for innerProduct() and ngp=maxOrder+100 for projection().
         % Example for using:
         % projection(@(x)funFileName(a,b,c,x),  K)
-        
+
         %----------------------------------------------------------------------------------------------------------
         Nbasis=numbering(obj,mesh,maxOrder);  % Generate the global No. of each base for a given @Mesh3D object.
         % maxOrder should be at least 2.
@@ -52,9 +65,9 @@ classdef BaseFunction < handle
         % Nbasis is the total number of basis. The numbering result is stored in property getNoByIxyz, No2fun and fun2No.
     end
     
-    methods(Access=protected,Sealed,Hidden,Static)
-        [ gp_x, gw ] = getGaussPts( ngp );  % gp_x: column vector containing the gauss points
-                                            % gw:   column vector containing the weights
+    methods(Access=protected,Sealed,Hidden)
+        [ gp_x, gw ] = getGaussPts( obj, ngp );  % gp_x: column vector containing the gauss points
+                                                 % gw:   column vector containing the weights
     end
     
 end

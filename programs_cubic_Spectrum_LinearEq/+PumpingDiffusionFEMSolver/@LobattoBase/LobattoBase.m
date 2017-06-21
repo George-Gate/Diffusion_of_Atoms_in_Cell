@@ -13,6 +13,7 @@ classdef LobattoBase < PumpingDiffusionFEMSolver.BaseFunction
     
     methods
         function obj=LobattoBase()
+            obj=obj@PumpingDiffusionFEMSolver.BaseFunction();
             obj.basisName='Lobatto';
         end
         
@@ -69,7 +70,7 @@ classdef LobattoBase < PumpingDiffusionFEMSolver.BaseFunction
     methods(Static)
         % return the value of base function at given points
         function val=funVal(xList,i)
-            import PumpingDiffusionFEMSolver.LobattoBase.lobattoP_N
+            import PumpingDiffusionFEMSolver.LobattoBase.*
             if ~( isvector(xList) && isvector(i) )
                 error('xList and i should be vectors.');
             end
@@ -92,7 +93,7 @@ classdef LobattoBase < PumpingDiffusionFEMSolver.BaseFunction
         
         % return the value of the first derivative of base function at given points
         function val=funFirstDerivative(xList,i)
-            import PumpingDiffusionFEMSolver.LobattoBase.legendreP_N
+            import PumpingDiffusionFEMSolver.LobattoBase.*
             if ~( isvector(xList) && isvector(i) )
                 error('xList and i should be vectors.');
             end

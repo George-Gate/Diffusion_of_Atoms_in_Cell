@@ -1,7 +1,7 @@
 function [ vecF ] = projection( obj,fun,maxOrder,ngp )
 %projection   Calculate the inner product of base function and a given function
 %   vecF is a [maxOrder x 1] column vector with vecF_i=(v_i,fun)
-%   fun should be function handles with only one input argument
+%   fun should be function handle with only one input argument
 %   Input argument 'ngp' is optional. It tell the method how many gauss point should be used to calc numerical intergrals.
 %   If ngp is not given, the default value is ngp=maxOrder+100.
 
@@ -14,6 +14,7 @@ function [ vecF ] = projection( obj,fun,maxOrder,ngp )
     end
     % get gauss points
     [ gp_x, gw ] = obj.getGaussPts( ngp );
+
     % evaluate base function at gauss points
     baseVal=obj.funVal(gp_x,1:maxOrder);
     % evaluate fun at gauss points
