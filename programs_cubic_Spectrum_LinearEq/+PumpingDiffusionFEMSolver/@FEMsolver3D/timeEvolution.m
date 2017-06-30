@@ -44,10 +44,18 @@ function [ ] = timeEvolution( obj,filename, u0 )
 
     % time evolution (H and F should be time independent)
     startT=tic;
-    disp('Time evolution started.');
-    opts=odeset('Mass',obj.MM,'MaxStep',0.1/pars.T0,'InitialStep',1e-6/pars.T0);
+    disp(['[',datestr(datetime,'mmm-dd HH:MM:SS'),'] Time evolution started.']);
+    opts=odeset('MaxStep',0.1/pars.T0,'InitialStep',1e-6/pars.T0);
+    opts=odeset(opts,'Stats','on','OutputFcn',@(t,y,flag)timeEvolutionOutputFunction(obj,t,y,flag),'OutputSel',[]);
     t_span=linspace(0,1,obj.sampleRate*pars.T0+1);
+% --------------------------------------------------------------------------
+%     invMH=obj.MM\obj.H;
+%     invMF=obj.MM\obj.F;
+%     [obj.sol_t,obj.sol_u] = ode45(@(t,u)invMH*u+invMF,t_span,obj.u0,opts);
+% --------------------------------------------------------------------------
+    opts=odeset(opts,'Mass',obj.MM);
     [obj.sol_t,obj.sol_u] = ode45(@(t,u)obj.H*u+obj.F,t_span,obj.u0,opts);
+% --------------------------------------------------------------------------
     disp(['Time used for evolution: ',sec2hms(toc(startT))]);
     
     % save result to file

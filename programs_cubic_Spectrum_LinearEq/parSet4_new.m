@@ -1,9 +1,9 @@
-% parameter set 4
+% parameter set 4 (not good, the way we treat first type boundary condition is not good.)
 % uniform laser, diffusion, first type boundary condition with rho_b=1/8/dimRho
 
 problemPars=PumpingDiffusionFEMSolver.ProblemPars();
 dimRho=problemPars.dimRho;
-problemPars.w=20000000;   % uniform laser
+problemPars.w=2000000;   % uniform laser
 problemPars.D_ph=0.1;  % diffusion
 problemPars.T0=5;
 problemPars.boundaryType='first';

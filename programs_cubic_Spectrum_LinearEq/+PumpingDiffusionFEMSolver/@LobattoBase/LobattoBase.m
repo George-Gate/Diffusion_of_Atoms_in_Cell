@@ -82,8 +82,13 @@ classdef LobattoBase < PumpingDiffusionFEMSolver.BaseFunction
             j=i-2;
             j(j<1)=1;
             val=lobattoP_N(j,xList)';   % get a result as if xList is a column vector
-            val(:,i==1)=(1-xList')/2;
-            val(:,i==2)=(1+xList')/2;
+            for iii=1:length(i)
+                if i(iii)==1
+                    val(:,iii)=(1-xList')/2;
+                elseif i(iii)==2
+                    val(:,iii)=(1+xList')/2;
+                end
+            end
             
             % reshape val
             if szX

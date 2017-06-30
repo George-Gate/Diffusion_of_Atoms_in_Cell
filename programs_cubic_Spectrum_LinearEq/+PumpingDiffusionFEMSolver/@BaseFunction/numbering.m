@@ -50,7 +50,7 @@ function Nbasis=numbering( obj,mesh,maxOrder )
             end
         end
     end
-    if topNo>1 && ~( No2fun.name(topNo)==0 &&  No2fun.name(topNo-1)=='e' )
+    if topNo>1 && topNo<=Nbasis && ~( No2fun.name(topNo)==0 &&  No2fun.name(topNo-1)=='e' )
         error ('Basis number check error!');
     end
 
@@ -76,7 +76,7 @@ function Nbasis=numbering( obj,mesh,maxOrder )
             end
         end
     end
-    if topNo>1 && ~( No2fun.name(topNo)==0 &&  No2fun.name(topNo-1)=='f' )
+    if topNo>1 && topNo<=Nbasis && ~( No2fun.name(topNo)==0 &&  No2fun.name(topNo-1)=='f' )
         error ('Basis number check error!');
     end
 

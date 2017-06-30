@@ -50,8 +50,14 @@ function [  ] = genCoeffs_boundary_independent( obj )
     % the MP_kron below is of the same size of MP when Ndomains=1, thus may require a lot more memory!
     % calc weighted inner product
     weightFun=obj.problemPars.funP;
-
-    MP=zeros(Nbasis,Nbasis);
+    
+    Nd_threshold=10;   % if Ndomains<Nd_threshold, use full matrix for MP
+        
+    if Ndomains<Nd_threshold
+        MP=zeros(Nbasis,Nbasis);
+    else
+        MP=spalloc(Nbasis,Nbasis,round(0.02*Nbasis*Nbasis));  % The estimation of non-zero elements is not accurate
+    end
     for Did=1:Ndomains
         xyz=mesh.domains.xyz(:,1,Did);
         h=mesh.domains.h(:,Did);
@@ -65,13 +71,27 @@ function [  ] = genCoeffs_boundary_independent( obj )
         MP_kron=kron(kron(phiphiF_z,phiphiF_y),phiphiF_x);
 
         id=reshape(getNoByIxyz(1:K,1:K,1:K,Did),K^3,1);
+        if issparse(MP)
+            MP_kron(abs(MP_kron)<1e-23)=0;   % Assume that max(abs(MP)) is much smaller than 1e+6
+            MP_kron=sparse(MP_kron);
+        end
         MP(id,id)=MP(id,id)+MP_kron;
     end
     clear MP_kron
     
-%     eps_MP=max(abs(MP(:)))*1e-17;
-%     disp(['All matrix elements of MP that smaller than ',num2str(eps_MP),' will be set to zero!']);
-%     MP(abs(MP)<eps_MP)=0;
+    if max(abs(MP(:)))>1e5  % check assumption
+        error('The code here assume that max(abs(MP)) is much smaller than 1e+6.');
+    end
+    
+    eps_MP=max(abs(MP(:)))*1e-17;
+    disp(['All matrix elements of MP that smaller than ',num2str(eps_MP),' will be set to zero!']);
+    if issparse(MP)
+        [rowI,colI,val]=find(MP);
+        val(abs(val)<eps_MP)=0;
+        MP=sparse(rowI,colI,val);
+    else
+        MP(abs(MP)<eps_MP)=0;
+    end
     
     
     % record results

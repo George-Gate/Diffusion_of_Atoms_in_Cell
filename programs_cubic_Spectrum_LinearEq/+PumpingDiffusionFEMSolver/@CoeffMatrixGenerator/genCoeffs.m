@@ -17,6 +17,10 @@ function [  ] = genCoeffs( obj )
     % use mex-function? No need!
     obj.genCoeffs_boundary_independent();
     
+    % matrix statistics
+    import PumpingDiffusionFEMSolver.library.matStat
+    matStat(obj.M,'M');matStat(obj.S,'S');matStat(obj.MP,'MP');
+    
     % calc MM and SS
     obj.MM=obj.M; obj.SS=obj.S;
     for i=1:obj.problemPars.dimRho-1
@@ -44,12 +48,12 @@ function [  ] = genCoeffs( obj )
     obj.MG=MG;
     clear MG
     
+    % matrix statistics
+    matStat(obj.MG,'MG');
+    
     % display time consumption
     import PumpingDiffusionFEMSolver.library.sec2hms;
     disp(['Time used to generate matrix MM, SS and MG: ',sec2hms(toc(startT))]);
-    % matrix statistics
-    import PumpingDiffusionFEMSolver.library.matStat
-    matStat(obj.M,'M');matStat(obj.S,'S');matStat(obj.MP,'MP');matStat(obj.MG,'MG');
     
     % ---------------------- Gen boundary term ------------------------------------
     % call genVecQ/genCBvecR/genMABvecF according to boundaryType

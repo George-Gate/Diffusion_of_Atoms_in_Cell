@@ -61,8 +61,7 @@ classdef FEMsolver3D < handle
 
     end
     
-    
-    
+ 
     
 % ========================= Setters/Getters ========================================
     methods
@@ -126,6 +125,36 @@ classdef FEMsolver3D < handle
             val=obj.coeffMatrix.vecF;
         end
     end
+
+% ========================= Output Function for Time Evolution ===========================
+    
+    properties(Access=private)
+        lastOutputTime=uint64(0);
+        lastReportedT=0;
+    end
+    
+    methods(Access=private)
+        function status=timeEvolutionOutputFunction(obj,t,~,flag)
+            status=0;
+            switch flag
+                case 'done'
+                    obj.lastOutputTime=uint64(0);
+                    obj.lastReportedT=0;
+                    disp('Time evolution completed!');
+                case []
+                    if t-obj.lastReportedT>0.1 || toc(obj.lastOutputTime) > 300
+                        disp(['[',datestr(datetime,'mmm-dd HH:MM:SS'),'] ',num2str(100*t,2),'%  t=',num2str(t)]);
+                        obj.lastOutputTime=tic;
+                        obj.lastReportedT=t;
+                    end
+                case 'init'
+                    obj.lastOutputTime=tic;
+                    obj.lastReportedT=0;
+                    disp(['[',datestr(datetime,'mmm-dd HH:MM:SS'),'] First time step!']);
+            end
+        end
+    end
+    
     
 end
 
