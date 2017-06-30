@@ -1,14 +1,15 @@
 disp(pwd);
 %% physical parameters
-parName='parSet2';
-%run(['codeVerification/',parName]);
-run(parName);
-
+clear pars
+parName='parSet1';
+% run(['codeVerification/',parName]);
+% run(parName);
+initPars;
 %% simulation parameters
-pars.K=10;
+pars.K=3;
 % meshGrid={[-1;-pars.w;pars.w;1];[-1;-pars.w;pars.w;1];[-1;1]};  % 9 domains
-meshGrid={[-1;1];[-1;1];[-1;1]};  % 1 domain
-% meshGrid={[-1;1];[-1;1];[-1;0;1]};  % 5 domains
+% meshGrid={[-1;1];[-1;1];[-1;1]};  % 1 domain
+meshGrid={[-1;-0.45;0.1;0.55;1];[-1;0.1;1];[-1;1]};  % 2 domains
 
 dimRho=pars.dimRho;
 %% initial state and boundary condition

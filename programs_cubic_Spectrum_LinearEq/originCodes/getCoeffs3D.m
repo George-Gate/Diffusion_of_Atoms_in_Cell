@@ -30,7 +30,7 @@ use_mex=0;
                 SS=blkdiag(SS,S);
             end
             % --------------- calc MP --------------------------
-            ngp=2*K+10;
+            ngp=2*K+100;
             MP=calcMP(mesh,P,fun2IntegralID_MP,MPid,K,Nbasis,ngp);
             
             matStat(MM);matStat(SS);matStat(MP);
