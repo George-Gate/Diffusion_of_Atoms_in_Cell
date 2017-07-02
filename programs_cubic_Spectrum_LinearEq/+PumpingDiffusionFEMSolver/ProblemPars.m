@@ -49,7 +49,11 @@ classdef ProblemPars
             if nargin==0
                 C=metaclass(obj);
                 s=what(C.ContainingPackage.Name);
-                filename=[s.path,'\DiffusionFEM.mat'];
+                if ispc
+                    filename=[s.path,'\DiffusionFEM.mat'];
+                elseif isunix
+                    filename=[s.path,'/DiffusionFEM.mat'];
+                end
             end
             diffPar=load(filename);
             obj.matC=diffPar.matC;

@@ -28,12 +28,18 @@ function [  ] = genCoeffs( obj )
         obj.SS=blkdiag(obj.SS,obj.S);
     end
     
+    % display time consumption
+    import PumpingDiffusionFEMSolver.library.sec2hms;
+    disp(['Time used to generate matrix MM, SS and MP: ',sec2hms(toc(startT))]);
+    
+    startT=tic;
     % calc MG 
     matDensity=nnz(obj.MP)/numel(obj.MP);
     D0=obj.problemPars.alpha * obj.problemPars.T0 * obj.problemPars.matD;
     C0=obj.problemPars.matC;
     if (matDensity*0.5938>0.2)
         % use full matrix to save memory
+        disp('Use full matrix for MG.');
         MG=kron(full(C0),full(obj.MP));
         MG_2=kron(sparse(D0),obj.M);
         id=find(MG_2);
@@ -42,6 +48,7 @@ function [  ] = genCoeffs( obj )
     else
         % kron() for sparse matrix needs x5 extra memory for intermediate variables
         % x1 means the size of non-zero elements, the size of sparse matrix is x2.
+        disp('Use sparse matrix for MG.');
         MG=kron(sparse(C0),sparse(obj.MP));
         MG=MG+kron(sparse(D0),obj.M);
     end
@@ -52,8 +59,7 @@ function [  ] = genCoeffs( obj )
     matStat(obj.MG,'MG');
     
     % display time consumption
-    import PumpingDiffusionFEMSolver.library.sec2hms;
-    disp(['Time used to generate matrix MM, SS and MG: ',sec2hms(toc(startT))]);
+    disp(['Time used to generate matrix MG: ',sec2hms(toc(startT))]);
     
     % ---------------------- Gen boundary term ------------------------------------
     % call genVecQ/genCBvecR/genMABvecF according to boundaryType

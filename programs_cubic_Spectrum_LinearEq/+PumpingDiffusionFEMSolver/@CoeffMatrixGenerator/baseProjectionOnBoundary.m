@@ -2,6 +2,7 @@ function [ vecX ] = baseProjectionOnBoundary( obj, funX, baseFunEvaluator, baseD
 %baseProjectionOnBoundary  To calc the vecX's in boundary terms
 %  For the inner product (v_i,funX) on boundary, set baseFunEvaluator=obj.baseFunHandle.funVal and baseDerivative=0
 %  For the inner product (dv_i/dn,funX) on boundary, set baseFunEvaluator=obj.baseFunHandle.funFirstDerivative and baseDerivative=1
+%  For the inner product (dv_i/dz,funX(x,y)) on boundary, set baseFunEvaluator=obj.baseFunHandle.funFirstDerivative and baseDerivative=0
 
 % ------------ Constant Definitions -----------------------------------------
     dkDir2lnID=[1,3,5;     % dkDir2lnID(dk,dir)=index in funX.

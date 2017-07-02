@@ -58,14 +58,38 @@ classdef FEMsolver3D < handle
         timeEvolution( obj,filename, u0 )
         % calc the expansion coeffs of initial state under the base function
         [ u0 ] = getInitialState(obj);
+        
+        % Save simulation result and parameters to file.
+        [ filename ] = saveResultToFile( obj, filename );
 
     end
     
  
+% ========================= Output Function for Time Evolution ===========================
     
-% ========================= Setters/Getters ========================================
+    properties(Access=private)
+        lastOutputTime=uint64(0);
+        lastReportedT=0;
+        lastSaveTime=uint64(0);
+        lastSavedT=0;
+    end
+    properties(SetAccess=private)
+        tyRecord=[];
+    end
+    
+    methods(Access=private)
+
+        % The Output Function for ode solvers
+        % Output evolution progress and save result during evolution
+        [ status ]=timeEvolutionOutputFunction(obj,t,y,flag);
+        
+    end
+    
+    
+    
+% ============================== Setters/Getters ========================================
     methods
-% ------------------------- Set Functions ----------------------------------------
+% ------------------------- Setter Functions ----------------------------------------
         function set.meshPars(obj,meshPars)
             obj.coeffMatrix.mesh.meshPars=meshPars;
         end
@@ -75,7 +99,7 @@ classdef FEMsolver3D < handle
         function set.problemPars(obj,problemPars)
             obj.coeffMatrix.problemPars=problemPars;
         end
-% ------------------------- Get Functions ----------------------------------------
+% ------------------------- Getter Functions ----------------------------------------
         function mesh=get.mesh(obj)
             mesh=obj.coeffMatrix.mesh;
         end
@@ -125,36 +149,6 @@ classdef FEMsolver3D < handle
             val=obj.coeffMatrix.vecF;
         end
     end
-
-% ========================= Output Function for Time Evolution ===========================
-    
-    properties(Access=private)
-        lastOutputTime=uint64(0);
-        lastReportedT=0;
-    end
-    
-    methods(Access=private)
-        function status=timeEvolutionOutputFunction(obj,t,~,flag)
-            status=0;
-            switch flag
-                case 'done'
-                    obj.lastOutputTime=uint64(0);
-                    obj.lastReportedT=0;
-                    disp('Time evolution completed!');
-                case []
-                    if t-obj.lastReportedT>0.1 || toc(obj.lastOutputTime) > 300
-                        disp(['[',datestr(datetime,'mmm-dd HH:MM:SS'),'] ',num2str(100*t,2),'%  t=',num2str(t)]);
-                        obj.lastOutputTime=tic;
-                        obj.lastReportedT=t;
-                    end
-                case 'init'
-                    obj.lastOutputTime=tic;
-                    obj.lastReportedT=0;
-                    disp(['[',datestr(datetime,'mmm-dd HH:MM:SS'),'] First time step!']);
-            end
-        end
-    end
-    
     
 end
 

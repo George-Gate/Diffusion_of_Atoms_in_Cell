@@ -60,21 +60,11 @@ function [ ] = timeEvolution( obj,filename, u0 )
     
     % save result to file
     startT=tic;
-    if ~exist('filename','var') || ~isa(filename,'char') || strcmp(filename,'')
-        filename=['FEMResult_',datestr(datetime,'yyyymmdd_HH_MM_SS'),'.mat'];
+    if ~exist('filename','var')
+        filename=obj.saveResultToFile();
+    else
+        filename=obj.saveResultToFile(filename);
     end
-    FEMResult.sol_t=obj.sol_t;
-    FEMResult.sol_u=obj.sol_u;
-    FEMResult.u0=obj.u0;
-    FEMResult.meshPars=obj.meshPars;
-    FEMResult.simuPars=obj.simuPars;
-    FEMResult.simuPars.baseFunHandle=obj.simuPars.baseFunHandle.copy;  % use deep copy to avoid cross affecting
-    FEMResult.problemPars=obj.problemPars;
-    FEMResult.getNoByIxyz=obj.baseFunction.getNoByIxyz;
-    FEMResult.Nbasis=obj.baseFunction.Nbasis;
-    FEMResult.sampleRate=obj.sampleRate;
-    save(filename,'FEMResult');
-    obj.FEMResult=FEMResult;
     disp(['Evolution result and parameters saved to "',filename,'"']);
     disp(['Time used to save result: ',sec2hms(toc(startT))]);
     

@@ -72,15 +72,15 @@ function [  ] = genCoeffs_boundary_independent( obj )
 
         id=reshape(getNoByIxyz(1:K,1:K,1:K,Did),K^3,1);
         if issparse(MP)
-            MP_kron(abs(MP_kron)<1e-23)=0;   % Assume that max(abs(MP)) is much smaller than 1e+6
+            MP_kron(abs(MP_kron)<1e-23)=0;   % Assume that max(abs(MP)) is much larger than 1e-6
             MP_kron=sparse(MP_kron);
         end
         MP(id,id)=MP(id,id)+MP_kron;
     end
     clear MP_kron
     
-    if max(abs(MP(:)))>1e5  % check assumption
-        error('The code here assume that max(abs(MP)) is much smaller than 1e+6.');
+    if max(abs(MP(:)))<1e-5  % check assumption
+        error(['The code here assume that max(abs(MP)) is much larger than 1e-6, but now it''s ',num2str(max(abs(MP(:))))]);
     end
     
     eps_MP=max(abs(MP(:)))*1e-17;

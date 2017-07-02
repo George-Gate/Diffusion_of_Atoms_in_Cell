@@ -22,10 +22,10 @@ classdef BaseFunction < handle & matlab.mixin.Copyable
         %-------------------------------------------------
     end
     
-    properties(Access=public)
+    properties(Access=private)
         gp_x;    % history of gauss point, for speed up
         gw;
-        gHisLen;
+        gHisLen; % set in constructor of this class
     end
     
     methods(Abstract,Static)
