@@ -68,6 +68,7 @@ function combineSolution( obj,sampleDim,lineID )
                          xyz(3,1)<=zList & zList<=xyz(3,2) ;
                 %sol.rho(idRange,:,:)=0;
                 len=sum(idRange);
+                
                 % construct base value for this idRange
                 coList=zeros(len,3);
                 oneAxisBase=zeros(len,K,3);
@@ -79,18 +80,25 @@ function combineSolution( obj,sampleDim,lineID )
                 end
                 tmpSol=zeros(len,lenT,dimRho);
                 % enumerate basis  (This part should be optimized)
-                for ix=1:K
-                    for iy=1:K
-                        for iz=1:K
-                            iNo=getNoByIxyz(ix,iy,iz,Did);
-                            if iNo==0; continue; end
-                            % construct base value for this basis
-                            baseValue=oneAxisBase(:,ix,1).*oneAxisBase(:,iy,2).*oneAxisBase(:,iz,3);
-                            % update tmpSol
-                            % tmpSol(1:len,1:lenT,1:dimRho)=...
-                            tmpSol=tmpSol+permute(u_dim(:,:,iNo),[3 1 2]).*baseValue;
-                        end
-                    end
+                iNoList=reshape(getNoByIxyz(1:K,1:K,1:K,Did),K^3,1);
+                ixList=reshape(repmat(reshape(1:K,K,1,1),1,K,K),K^3,1);
+                iyList=reshape(repmat(reshape(1:K,1,K,1),K,1,K),K^3,1);
+                izList=reshape(repmat(reshape(1:K,1,1,K),K,K,1),K^3,1);
+                
+                % generate u_local for sliced accessing
+                u_local=zeros(lenT,dimRho,K^3);
+                iNoList2=iNoList;iNoList2(iNoList2==0)=1;  % replace 0 to prevent error
+                u_local(:,:,:)=u_dim(:,:,iNoList2);   % u_local(time,iDim,iNo)
+                
+                parfor ii=1:K^3
+                    iNo=iNoList(ii);
+                    if iNo==0; continue; end
+                    ix=ixList(ii);iy=iyList(ii);iz=izList(ii);
+                    % construct base value for this basis
+                    baseValue=oneAxisBase(:,ix,1).*oneAxisBase(:,iy,2).*oneAxisBase(:,iz,3);
+                    % update tmpSol
+                    % tmpSol(1:len,1:lenT,1:dimRho)=...
+                    tmpSol=tmpSol+permute(u_local(:,:,ii),[3 1 2]).*baseValue;
                 end
                 % update sol
                 rho(idRange,:,:)=tmpSol;
