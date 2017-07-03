@@ -37,15 +37,15 @@ function [  ] = plotLines(obj,lineIDs)
             subplot(3,4,iDim);
             if isscalar(xList)
                 % 0D plot
-                plot(tList*pars.T0,8/pars.L^3*sum(rho(:,:,iDim),3));
-                ylabel(['$$\rho_',num2str(iDim),'/\mathrm{cm}^3$$'],'interpreter','latex');
+                plot(tList*pars.T0,8*sum(rho(:,:,iDim),3));
+                ylabel(['$$L^3 \rho_',num2str(iDim),'$$'],'interpreter','latex');
             else  % 1D plot
-                mesh(tList*pars.T0,xiList,8/pars.L^3*sum(rho(:,:,iDim),3));
+                mesh(tList*pars.T0,xiList,8*sum(rho(:,:,iDim),3));
                 view([0 90]);box on;
                 colormap winter
                 colorbar;
                 ylabel('$$\xi$$','interpreter','latex');
-                zlabel(['$$\rho_',num2str(iDim),'/\mathrm{cm}^3$$'],'interpreter','latex');
+                zlabel(['$$L^3 \rho_',num2str(iDim),'$$'],'interpreter','latex');
             end
             set(gca,'xlim',pars.T0*[min(tList(:)),max(tList(:))]);
             xlabel('time/s');
@@ -55,13 +55,13 @@ function [  ] = plotLines(obj,lineIDs)
         subplot(3,4,dimRho+1);
         if isscalar(xList)
             % 0D plot
-            plot(tList*pars.T0,(8*sum(rho(:,:,1:dimRho),3)-1)/pars.L^3);
-            ylabel('$$\sum_{i}(\rho_i)-1/V$$','interpreter','latex');
+            plot(tList*pars.T0,(8*sum(rho(:,:,1:dimRho),3)-1));
+            ylabel('$$L^3 \sum_{i}(\rho_i)-1$$','interpreter','latex');
         else  % 1D plot
-            mesh(tList*pars.T0,xiList,(8*sum(rho(:,:,1:dimRho),3)-1)/pars.L^3);
+            mesh(tList*pars.T0,xiList,(8*sum(rho(:,:,1:dimRho),3)-1));
             view([0 90]);box on;colormap winter;colorbar;
             ylabel('$$\xi$$','interpreter','latex');
-            zlabel('$$\sum_{i}(\rho_i)-1/V$$','interpreter','latex');
+            zlabel('$$L^3 \sum_{i}(\rho_i)-1$$','interpreter','latex');
         end
         set(gca,'xlim',pars.T0*[min(tList(:)),max(tList(:))]);
         xlabel('time/s');
