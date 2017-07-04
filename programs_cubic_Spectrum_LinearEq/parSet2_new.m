@@ -7,7 +7,7 @@ problemPars.w=200000000;   % uniform laser
 problemPars.D_ph=0;  % no diffusion
 problemPars.T0=5;
 problemPars.boundaryType='second';
-problemPars.drho_b=zeros(dimRho,1);
+problemPars.drho_b_ph=zeros(dimRho,1);
 
 % analytical solution(for no diffusion)
 % t,x,y must be scalar

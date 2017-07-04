@@ -17,7 +17,7 @@ function [  ] = genMABvecF( obj )
     maxOrder=obj.simuPars.maxOrder;
     ngp=2*maxOrder+obj.simuPars.ngp;
 % -------------------- Calc MAB ---------------------------------------------
-    A=obj.problemPars.robinA;
+    A=obj.problemPars.robinA;  % get dependent property robinA may be time expensive, store it.
     obj.MAB=spalloc(Nbasis*obj.dimRho,Nbasis*obj.dimRho,Nbasis*maxOrder*100);
     % enumerate all surface and find boundary surface.
     for Did=1:mesh.Ndomains

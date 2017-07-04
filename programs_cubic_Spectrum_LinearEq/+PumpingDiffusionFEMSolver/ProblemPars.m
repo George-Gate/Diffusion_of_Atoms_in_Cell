@@ -11,30 +11,6 @@ classdef ProblemPars
         T0=0.5;     % evolution time, in unit of seconds
         L=1;        % length of cubic cell, in unit of cm
         anaSolForm; % analytical solution (if available)
-        rho_0;      % initial condition, should be a constant column vector 
-                    % or a column cell vector that contains three 1D functions
-                    % in each element.
-        
-        %-------------[Format of boundary condition]------------------
-        % 1. A [dimRho x 1] constant vector, saying that the boundary value if independent of space 
-        % 2. A [6 x 1] cell array, each element can be either a [dimRho x 1] constant vector or
-        %    a [dimRho x 1] cell array that contain 2-D function handles which returns a scalar.
-        %    The 2-D function handle should be something like 
-        %                      @(x,y)... or @(y,z)... or @(z,x)... 
-        %                   or {@(x)...;@(y)...} or {@(y)...;@(z)...} or {@(z)...;@(x)...}
-        %    The [6 x 1] cell array provides the boundary value for x=-1, x=1, y=-1, y=1, z=-1, z=1 plane.
-        %##  For the case of the matrix A in robin boundary condition, the size [dimRho x 1] above is 
-        %    replaced by [dimRho x dimRho] or [1 x 1].
-        %### For robinA, there is a new matrix-function separable form.
-        %    Each element of the [6 x 1] cell array can be a length 2 cell vector like the following:
-        %            {rand(dimRho),@(z,x)z+x}
-        %            {rand(dimRho),{@(z)z.*z,@(x)x.^2}}
-        % !!! The boudary condition should be time independent.
-        rho_b;      % boundary condition (first type)
-        drho_b;     % boundary condition (second type)
-        robinF;     % boundary condition (robin type)
-        robinA;     % boundary condition (robin type)
-        boundaryType; % boundary type, one of first, second, robin.
     end
     
     properties(Dependent)
@@ -49,24 +25,20 @@ classdef ProblemPars
             if nargin==0
                 C=metaclass(obj);
                 s=what(C.ContainingPackage.Name);
-                if ispc
-                    filename=[s.path,'\DiffusionFEM.mat'];
-                elseif isunix
-                    filename=[s.path,'/DiffusionFEM.mat'];
-                end
+                filename=fullfile(s.path,'DiffusionFEM.mat');
             end
             diffPar=load(filename);
             obj.matC=diffPar.matC;
             obj.matD=diffPar.matD;
             anaSolForm=@(obj,t,x,y,z)0;
             dimRho=obj.dimRho;
-            obj.rho_0=ones(dimRho,1)/8/dimRho;
+            obj.rho_0_ph=ones(dimRho,1)/dimRho/obj.L^3;
             % default boundary condition
-            obj.boundaryType='first';
-            obj.rho_b=ones(dimRho,1)/8/dimRho;
-            obj.drho_b=zeros(dimRho,1);
-            obj.robinA=0;
-            obj.robinF=zeros(dimRho,1);
+            obj.boundaryType='second';
+            obj.rho_b_ph=ones(dimRho,1)/dimRho/obj.L^3;
+            obj.drho_b_ph=zeros(dimRho,1);
+            obj.robinA_ph=0;
+            obj.robinF_ph=zeros(dimRho,1);
         end
         
         function dimRho=get.dimRho(obj)
@@ -124,13 +96,52 @@ classdef ProblemPars
                     end
             end
         end
+    end
+% ============================= Initial state && Boundary condition ===========================================
         
+    properties
+        rho_0_ph;   % initial condition, should be a constant column vector 
+                    % or a column cell vector that contains a separable 3D function
+                    % in each element.
+        
+        %-------------[Format of boundary condition]------------------
+        % 1. A [dimRho x 1] constant vector, saying that the boundary value if independent of space 
+        % 2. A [6 x 1] cell array, each element can be either a [dimRho x 1] constant vector or
+        %    a [dimRho x 1] cell array that contain 2-D function handles which returns a scalar.
+        %    The 2-D function handle should be something like 
+        %                      @(x,y)... or @(y,z)... or @(z,x)... 
+        %                   or {@(x)...;@(y)...} or {@(y)...;@(z)...} or {@(z)...;@(x)...}
+        %    The [6 x 1] cell array provides the boundary value for x=-1, x=1, y=-1, y=1, z=-1, z=1 plane.
+        %##  For the case of the matrix A in robin boundary condition, the size [dimRho x 1] above is 
+        %    replaced by [dimRho x dimRho] or [1 x 1].
+        %### For robinA, there is a new matrix-function separable form.
+        %    Each element of the [6 x 1] cell array can be a length 2 cell vector like the following:
+        %            {rand(dimRho),@(z,x)z+x}
+        %            {rand(dimRho),{@(z)z.*z,@(x)x.^2}}
+        % !!! The boudary condition should be time independent.
+        rho_b_ph;      % boundary condition (first type)
+        drho_b_ph;     % boundary condition (second type)
+        robinF_ph;     % boundary condition (robin type)
+        robinA_ph;     % boundary condition (robin type)
+        boundaryType;  % boundary type, one of first, second or robin.
+    end
 
-% ====================== set function for initial state ============================
-        function obj=set.rho_0(obj,val)
+    properties(Dependent)
+        rho_0;      % dimensionless form of rho_0_ph
+        rho_b;      % dimensionless form of rho_b_ph
+        drho_b;     % dimensionless form of drho_b_ph
+        robinF;     % dimensionless form of robinF_ph
+        robinA;     % dimensionless form of robinA_ph
+    end
+
+    methods
+% ---------------------------- set function for initial state -----------------------------------
+        function obj=set.rho_0_ph(obj,val)
+            errStr='The format of rho_0_ph is invalid.';
             if isnumeric(val) && iscolumn(val)
-                obj.rho_0=val;
+                obj.rho_0_ph=val;
             elseif iscell(val) && iscolumn(val)
+                % check form
                 for i=1:length(val)
                     if isnumeric(val{i}) && isscalar(val{i})
                         % good
@@ -143,18 +154,20 @@ classdef ProblemPars
                             elseif isa(tmp{j},'function_handle') && nargin(tmp{j})==1
                                 % good
                             else
-                                error('The format of rho_0 is invalid.');
+                                error(errStr);
                             end
                         end
                     else
-                        error('The format of rho_0 is invalid.');
+                        error(errStr);
                     end
                 end
+                % set
+                obj.rho_0_ph=val;
             else
-                error('The format of rho_0 is invalid.');
+                error(errStr);
             end
         end
-% ====================== set functions of boundary conditions ============================
+% --------------------------------- set functions of boundary conditions -------------------------------
         function obj=set.boundaryType(obj,val)
             validType={'first','second','robin'};
             if ismember(val,validType)
@@ -163,37 +176,54 @@ classdef ProblemPars
                 error(['Unknow boundary type: ',val,'. Possible types are: ',strjoin(validType)]);
             end
         end
-        function obj=set.rho_b(obj,val)
+        function obj=set.rho_b_ph(obj,val)
             if obj.checkBoundaryForm_vector(val)
-                obj.rho_b=val;
+                obj.rho_b_ph=val;
             else
-                error('The format of rho_b is invalid.');
+                error('The format of rho_b_ph is invalid.');
             end
         end
-        function obj=set.drho_b(obj,val)
+        function obj=set.drho_b_ph(obj,val)
             if obj.checkBoundaryForm_vector(val)
-                obj.drho_b=val;
+                obj.drho_b_ph=val;
             else
-                error('The format of drho_b is invalid.');
+                error('The format of drho_b_ph is invalid.');
             end
         end
-        function obj=set.robinF(obj,val)
+        function obj=set.robinF_ph(obj,val)
             if obj.checkBoundaryForm_vector(val)
-                obj.robinF=val;
+                obj.robinF_ph=val;
             else
-                error('The format of robinF is invalid.');
+                error('The format of robinF_ph is invalid.');
             end
         end
-        function obj=set.robinA(obj,val)
+        function obj=set.robinA_ph(obj,val)
             if obj.checkBoundaryForm_matrix(val)
-                obj.robinA=val;
+                obj.robinA_ph=val;
             else
-                error('The format of robinA is invalid.');
+                error('The format of robinA_ph is invalid.');
             end
         end
-% ======================================================================================  
+        
+% --------------------------------- Get functions of rho_0, rho_b, drho_b etc. -------------------------------
+        function rho_0=get.rho_0(obj)
+            rho_0=Nondimensionalization_init(obj.rho_0_ph,obj.L,(obj.L/2)^3);
+        end
+        function rho_b=get.rho_b(obj)
+            rho_b= Nondimensionalization_boundary(obj.rho_b_ph,  obj.L, (obj.L/2)^3, obj.dimRho);
+        end
+        function drho_b=get.drho_b(obj)
+            drho_b=Nondimensionalization_boundary(obj.drho_b_ph, obj.L, (obj.L/2)^4, obj.dimRho);
+        end
+        function robinA=get.robinA(obj)
+            robinA=Nondimensionalization_boundary(obj.robinA_ph, obj.L, 1,           obj.dimRho);
+        end
+        function robinF=get.robinF(obj)
+            robinF=Nondimensionalization_boundary(obj.robinF_ph, obj.L, (obj.L/2)^3, obj.dimRho);
+        end
     end
     
+% -------------------------- Assistant Functions for format checking ----------------------------------------------
     methods(Hidden,Access=private)
         % This function defines the format of boundary condition
         % obj.rho_b, obj.drho_b, obj.robinF
@@ -287,4 +317,85 @@ function yes=isNumericMatrix(val,len)
     else
         yes=false;
     end
+end
+
+% ----------------- Assistant Functions for get functions of rho_0, rho_b, drho_b etc. ----------------------------------------------
+% Get rho_0 from rho_0_ph
+% Assume that rho_0_ph can pass the format check of initial value
+function rho_0=Nondimensionalization_init(rho_0_ph,L,factor)
+    dimRho=size(rho_0_ph,1);
+    if isnumeric(rho_0_ph)       % constant init condition
+        rho_0=rho_0_ph*factor;
+    else                        % init condition if a function
+        rho_0=cell(dimRho,1);
+        for i=1:dimRho
+            if isnumeric(rho_0_ph{i})
+                rho_0{i}=rho_0_ph{i}*factor;
+            else
+                rho_0{i}=cell(1,3);
+                factor3=factor^(1/3);
+                for k=1:3
+                    if isnumeric(rho_0_ph{i}{k})
+                        rho_0{i}{k}=rho_0_ph{i}{k}*factor3;
+                    else
+                        rho_0{i}{k}=@(x)rho_0_ph{i}{k}(x*L/2)*factor3;
+                    end
+                end
+            end
+        end
+    end
+end
+
+% Get rho_b from rho_b_ph, drho_b from drho_b_ph, robinA from robinA_ph, and robinF from robinF_ph
+% Assume that bVal_ph can pass the format check of boundary condition
+function bVal=Nondimensionalization_boundary(bVal_ph,L,factor,dimRho)
+    if isnumeric(bVal_ph)    % bVal_ph is constant
+        bVal=factor*bVal_ph;
+    else                     % bVal_ph is a [6 x 1] cell vector
+        bVal=cell(6,1);
+        for iP=1:6
+            if isnumeric(bVal_ph{iP})  % bVal_ph on this plane is constant
+                bVal{iP}=factor*bVal_ph{iP};
+            else             % bVal_ph on this plane is some spatial function, so it should be
+                             % a cell array of size [1 x 1] or [dimRho x 1] or [dimRho x dimRho]
+                             % or a special case for robinA: length 2 cell vector with bVal_ph0{1}
+                             % a [dimRho x dimRho] numeric matrix and bVal_ph0{2} a 2D function
+                bVal_ph0=bVal_ph{iP};
+                bVal{iP}=cell(size(bVal_ph0));
+                if isvector(bVal_ph0) && length(bVal_ph0)==2 ...  % special case for robinA
+                    && size(bVal_ph0{1},1)==dimRho && size(bVal_ph0{1},2)==dimRho
+                    bVal{iP}{1}=factor*bVal_ph0{1};
+                    bVal{iP}{2}=convert2D(bVal_ph0{2},L,1);
+                else                  % size=[1 x 1] or [dimRho x 1] or [dimRho x dimRho]
+                    for ii=1:size(bVal_ph0,1)
+                        for kk=1:size(bVal_ph0,2)
+                            bVal{iP}{ii,kk}=convert2D(bVal_ph0{ii,kk},L,factor);
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    % change the variables of a 2D function: f(x,y) -> factor*f(x*L/2,y*L/2)
+    function fun2=convert2D(fun,L,factor)
+        % fun should be either a numeric scalar or a 2D function handle or a length 2 cell vector
+        % whose elements are either 1D function handles or numeric scalars
+        if isnumeric(fun)
+            fun2=factor*fun;
+        elseif iscell(fun)
+            fun2=cell(1,2);
+            factor2=sqrt(factor);
+            for i=1:2
+                if isnumeric(fun{i})
+                    fun2{i}=factor2*fun{i};
+                else
+                    fun2{i}=@(x)factor2*fun{i}(x*L/2);
+                end
+            end
+        else
+            fun2=@(x,y)factor*fun(x*L/2,y*L/2);
+        end
+    end
+    
 end

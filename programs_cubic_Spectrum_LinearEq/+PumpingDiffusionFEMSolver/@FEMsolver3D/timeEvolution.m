@@ -2,6 +2,11 @@ function [ ] = timeEvolution( obj,filename, u0 )
 %timeEvolution  Perform the time evolution
     import PumpingDiffusionFEMSolver.library.sec2hms;
     
+    % problem report
+    if strcmp(obj.problemPars.boundaryType,'first')
+        error('First type boundary condition is currently not supported!');
+    end
+    
     % makeMesh, baseNumbering, generateCoeffMatrices
     % ##!! POSSIBLE BUG: If someone change the baseNumbering but not other parameters, then
     %      coeffMatrix will not be outdated, thus may cause errors. DO NOT use the numbering()

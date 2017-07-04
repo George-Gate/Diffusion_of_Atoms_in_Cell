@@ -8,8 +8,8 @@ problemPars.w=0.8;   % gaussian laser
 problemPars.D_ph=0.1;  % diffusion
 problemPars.T0=5;
 problemPars.boundaryType='robin';
-problemPars.robinF=ones(dimRho,1)/dimRho/8;
-problemPars.robinA=0.5;
+problemPars.robinF_ph=ones(dimRho,1)/dimRho;
+problemPars.robinA_ph=0.5;
 
 
 

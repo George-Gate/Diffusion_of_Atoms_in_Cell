@@ -4,7 +4,7 @@ function [ u0 ] = getInitialState(obj)
 %   may be not up to date.
     Nbasis=obj.baseFunction.Nbasis;
     dimRho=obj.coeffMatrix.dimRho;
-    rho_0=obj.problemPars.rho_0;
+    rho_0=obj.problemPars.rho_0;  % get dependent property rho_0 may be time expensive, store it.
     base=obj.baseFunction;
     maxOrder=obj.simuPars.maxOrder;
     ngp=maxOrder+obj.simuPars.ngp;

@@ -8,7 +8,7 @@ problemPars.w=0.2;   % gaussian laser
 problemPars.D_ph=0.1;  % diffusion
 problemPars.T0=5;
 problemPars.boundaryType='robin';
-problemPars.robinF=zeros(dimRho,1);
+problemPars.robinF_ph=zeros(dimRho,1);
 A=zeros(dimRho,dimRho);
 channel=[5,2,0.1;   % 5 <-> 2, 0.1
          5,8,0.3];  % 5 <-> 8, 0.3
@@ -19,7 +19,7 @@ for iii=1:size(channel,1)
     A(k,i)=A(k,i)-rate;
     A(k,k)=A(k,k)+rate;
 end
-problemPars.robinA=A;
+problemPars.robinA_ph=A;
 
 
 

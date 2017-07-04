@@ -7,7 +7,7 @@ problemPars.w=2000000;   % uniform laser
 problemPars.D_ph=0.1;  % diffusion
 problemPars.T0=5;
 problemPars.boundaryType='first';
-problemPars.rho_b=ones(dimRho,1)/8/dimRho;
+problemPars.rho_b_ph=ones(dimRho,1)/dimRho;
 
 
 % analytical solution(for no diffusion)
