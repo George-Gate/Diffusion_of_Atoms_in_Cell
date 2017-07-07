@@ -45,7 +45,9 @@ function [ u0 ] = getInitialState(obj)
     u0=zeros(Nbasis*dimRho,1);
     N_b=(1:Nbasis)';
     M=obj.M;
+%     [massL,massU,massP,massQ,massR] = lu(M);
     for iDim=1:dimRho
+%         u0(N_b+(iDim-1)*Nbasis)=massQ*(massU\(massL\(massP*(massR\v0(N_b+(iDim-1)*Nbasis)))));
         u0(N_b+(iDim-1)*Nbasis)=M\v0(N_b+(iDim-1)*Nbasis);
     end
 

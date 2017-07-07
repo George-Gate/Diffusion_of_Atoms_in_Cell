@@ -11,13 +11,20 @@ classdef ProblemPars
         T0=0.5;     % evolution time, in unit of seconds
         L=1;        % length of cubic cell, in unit of cm
         anaSolForm; % analytical solution (if available)
+                    % It should be a function @(obj,t,x,y,z) with 
+                    % obj of class @ProblemPars .
+                    % For each (t,x,y,z) pair, anaSolForm should return
+                    % a [dimRho x 1] column vector.
+                    % anaSolForm can be designed to accept row vector input,
+                    % i.e. given [1 x len] row vectors x,y,z and t as the input, 
+                    % and return a [dimRho x len] matrix as output.
     end
     
     properties(Dependent)
         dimRho;     % dimension of rho
         funP;       % the spatial distribution of laser power
         D;          % the diffusion coefficient D for the dimensionless PDE
-        anaSol;     % analytical solution (if anaSolForm is set)
+        anaSol;     % analytical solution (if anaSolForm is set), @(t,x,y,z)
     end
     
     methods
@@ -53,7 +60,7 @@ classdef ProblemPars
                   @(z)obj.T0*obj.P0};
         end
         function anaSol=get.anaSol(obj) % !!!!! this part not finished
-            anaSol=@(t,x,y,z)obj.anaSolForm(obj,t,x,y,z);
+            anaSol=@(t,x,y,z)(obj.L/2)^3*obj.anaSolForm(obj,t*obj.T0,x*obj.L/2,y*obj.L/2,z*obj.L/2);
         end
         function obj=set.anaSolForm(obj,fun)  % !!!!! this part not finished
             if isa(fun,'function_handle') && nargin(fun)==5
@@ -216,10 +223,10 @@ classdef ProblemPars
             drho_b=Nondimensionalization_boundary(obj.drho_b_ph, obj.L, (obj.L/2)^4, obj.dimRho);
         end
         function robinA=get.robinA(obj)
-            robinA=Nondimensionalization_boundary(obj.robinA_ph, obj.L, 1,           obj.dimRho);
+            robinA=Nondimensionalization_boundary(obj.robinA_ph, obj.L, (obj.L/2),   obj.dimRho);
         end
         function robinF=get.robinF(obj)
-            robinF=Nondimensionalization_boundary(obj.robinF_ph, obj.L, (obj.L/2)^3, obj.dimRho);
+            robinF=Nondimensionalization_boundary(obj.robinF_ph, obj.L, (obj.L/2)^4, obj.dimRho);
         end
     end
     

@@ -1,12 +1,12 @@
 %% load and combine result
 % tyRecord file list, in time increasing order
 % folder path
-folder=fullfile('Simulation_Results','parSet3, 2x2x1, maxOrder=14');
+folder=fullfile('codeValidation','anaSol_2');
 % get file list
 fileObj=dir(fullfile(folder,'tyRecord_t0=*.mat'));
 fileList={fileObj.name}';
 % load data from files
-load parameters.mat
+load(fullfile(folder,'parameters.mat'));
 FEMResult.sol_t=0;
 FEMResult.sol_u=FEMResult.u0;
 for fID=1:length(fileList)

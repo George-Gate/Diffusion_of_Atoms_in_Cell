@@ -36,7 +36,7 @@ classdef ResultVisualizer < handle
             end
         end
         
-        % Add a new sample line to sampleline list
+        % Add a new sample line to sampleline list, the sample line should be inside [-1,1]^3
         function addSampleLine(obj,xList,yList,zList,label)
             if ischar(label) && isnumeric(xList) && isnumeric(yList) && isnumeric(zList) ...
                     && isvector(xList) && isvector(yList) && isvector(zList) ...
@@ -54,7 +54,7 @@ classdef ResultVisualizer < handle
         end
         
         % Print out the sample line list
-        function showSampleLines(obj)
+        function listSampleLines(obj)
             num_lines=length(obj.sampleLines);
             if num_lines==0
                 disp('No sample line.');
@@ -70,6 +70,40 @@ classdef ResultVisualizer < handle
                     end
                     fprintf('   %-5i| %-25s| %-30s\n',i,coStr,obj.sampleLines{i}{4});
                 end
+            end
+        end
+        
+        % Show specific sample lines in a figure
+        function showSampleLines(obj,lineIDs)
+            if nargin<2
+                lineIDs=1:length(obj.sampleLines);
+            end
+            if isempty(lineIDs)
+                disp('No sample line.');
+            else
+                if ~isnumeric(lineIDs) || min(lineIDs(:))<1 || max(lineIDs(:))>length(obj.sampleLines)
+                    error('Invalid Line No.');
+                end
+                lineIDs=reshape(lineIDs,1,numel(lineIDs));
+            % -------------------- Plot Sampling Lines ---------------------------------
+                figure();
+                tag={};
+                for Lid=lineIDs
+                    xList=obj.sampleLines{Lid}{1};  % these should be column vectors
+                    yList=obj.sampleLines{Lid}{2};
+                    zList=obj.sampleLines{Lid}{3};
+                    tag=[tag,{obj.sampleLines{Lid}{4}}]; %#ok<AGROW>
+                    if isscalar(xList)
+                        scatter3(xList,yList,zList);
+                    else
+                        plot3(xList,yList,zList);
+                    end
+                    hold on;
+                end
+                legend(tag{:});
+                title('Sampling Lines');box on;
+                xlabel('x');ylabel('y');zlabel('z');
+                set(gca,'xlim',[-1,1],'ylim',[-1,1],'zlim',[-1,1]);
             end
         end
         

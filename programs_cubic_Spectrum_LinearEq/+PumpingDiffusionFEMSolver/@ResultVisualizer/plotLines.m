@@ -3,7 +3,7 @@ function [  ] = plotLines(obj,lineIDs)
 %   lineIDs - Sepcifies which sampling lines to plot
 
     num_lines=length(obj.sampleLines);
-    if ~isnumeric(lineIDs) || min(lineIDs(:))<1 || max(lineIDs(:))>num_lines
+    if isempty(lineIDs) || ~isnumeric(lineIDs) || min(lineIDs(:))<1 || max(lineIDs(:))>num_lines
         error('Invalid Line No.');
     end
     lineIDs=reshape(lineIDs,1,numel(lineIDs));
@@ -104,25 +104,9 @@ function [  ] = plotLines(obj,lineIDs)
                   ,'Position',[0.75 0.21 0.1 0.1]);
         pause(0.1);
     end
-% -------------------- Plot Sampling Lines ---------------------------------
-    figure();
-    tag={};
-    for Lid=lineIDs
-        xList=obj.sampleLines{Lid}{1};  % these should be column vectors
-        yList=obj.sampleLines{Lid}{2};
-        zList=obj.sampleLines{Lid}{3};
-        tag=[tag,{obj.sampleLines{Lid}{4}}]; %#ok<AGROW>
-        if isscalar(xList)
-            scatter3(xList,yList,zList);
-        else
-            plot3(xList,yList,zList);
-        end
-        hold on;
-    end
-    legend(tag{:});
-    title('Sampling Lines');box on;
-    xlabel('x');ylabel('y');zlabel('z');
-    set(gca,'xlim',[-1,1],'ylim',[-1,1],'zlim',[-1,1]);
+
+    % show sample lines
+    obj.showSampleLines(lineIDs);
     
     % display time consumption
     import PumpingDiffusionFEMSolver.library.sec2hms;
