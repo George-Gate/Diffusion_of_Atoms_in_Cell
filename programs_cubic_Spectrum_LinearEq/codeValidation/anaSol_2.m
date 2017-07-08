@@ -24,7 +24,7 @@ problemPars.robinF_ph=zeros(2,1);
 problemPars.rho_0_ph={{@(x)-exp(2*x),@(y)exp(3*y),@(z)exp(z)};
                       {@(x)exp(2*x),@(y)exp(3*y),@(z)exp(z)}};
 
-% analytical solution(for no diffusion)
+% analytical solution
 problemPars.anaSolForm=@(obj,t,x,y,z)[-exp(2*x+3*y+z-4*t);     % x,y,z and t should be row vectors
                                        exp(2*x+3*y+z-4*t)];
 

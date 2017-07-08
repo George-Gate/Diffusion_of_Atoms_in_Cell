@@ -50,6 +50,7 @@ function [  ] = genCoeffs_boundary_independent( obj )
     % the MP_kron below is of the same size of MP when Ndomains=1, thus may require a lot more memory!
     % calc weighted inner product
     if obj.problemPars.P0==0  % if P0==0, no need to generate MP (This assume that funP has the form funP(r)=P0*A(x)B(y)C(z))
+        % Just treat P0==0 as a flag to disable the calculation of MP
         MP=sparse([],[],[],Nbasis,Nbasis);
     else
         weightFun=obj.problemPars.funP;

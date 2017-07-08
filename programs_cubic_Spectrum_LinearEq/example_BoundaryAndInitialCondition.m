@@ -56,4 +56,8 @@ problem.rho_0_ph=rho_0_1;
 problem.rho_0_ph=rho_0_2;
 problem.rho_0_ph={rho_0_1,rho_0_1,rho_0_2};  % sum of several parts
 
+% ------------ Example for funP ---------------------------------------
+problem.funPForm_ph={@(obj,x)obj.P0*x;
+                     @(obj,y)y/obj.L;
+                     @(obj,z)1};
 

@@ -32,7 +32,9 @@ function [ u0 ] = getInitialState(obj,rho_0)
             for iDim=1:dimRho
                 if isnumeric(rho_0_i)
                     fun={@(x)rho_0_i(iDim),@(y)1, @(z)1};
-                else   % rho_0 is a cell vector
+                elseif isnumeric(rho_0_i{iDim})
+                    fun={@(x)rho_0_i{iDim},@(y)1, @(z)1};
+                else   % rho_0_i{iDim} is 3D function
                     fun=rho_0_i{iDim};
                     for i=1:3
                         if isnumeric(fun{i})

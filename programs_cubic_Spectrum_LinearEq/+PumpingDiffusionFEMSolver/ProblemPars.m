@@ -6,7 +6,7 @@ classdef ProblemPars
         matD;       % relaxation rate
         alpha=0.5;  % 0.5/s
         w=0.2;      % 0.2cm
-        P0=1;       % 1/s
+        P0=1;       % 1/s, set P0=0 to disable the calculation of matrix MP
         D_ph=0.1;   % 0.1 cm^2/s
         T0=0.5;     % evolution time, in unit of seconds
         L=1;        % length of cubic cell, in unit of cm
@@ -18,6 +18,8 @@ classdef ProblemPars
                     % anaSolForm can be designed to accept row vector input,
                     % i.e. given [1 x len] row vectors x,y,z and t as the input, 
                     % and return a [dimRho x len] matrix as output.
+        funPForm_ph;% The form of funP. Should be length 3 cell vector containing 
+                    % three function handles: {@(obj,x)...;@(obj,y)...;@(obj,z)...}
     end
     
     properties(Dependent)
@@ -46,6 +48,10 @@ classdef ProblemPars
             obj.drho_b_ph=zeros(dimRho,1);
             obj.robinA_ph=0;
             obj.robinF_ph=zeros(dimRho,1);
+            % default funPForm
+            obj.funPForm_ph={@(obj,x)exp( -x.*x ./ (obj.w)^2 );...
+                             @(obj,y)exp( -y.*y ./ (obj.w)^2 );...
+                             @(obj,z)obj.P0};
         end
         
         function dimRho=get.dimRho(obj)
@@ -58,20 +64,34 @@ classdef ProblemPars
         function D=get.D(obj)
             D=4*obj.T0/obj.L/obj.L*obj.D_ph;
         end
+        % funP
+        function obj=set.funPForm_ph(obj,fun)
+            if iscell(fun) && isvector(fun) && length(fun)==3
+                for i=1:3
+                    if ~( isa(fun{i},'function_handle') && nargin(fun{i})==2 )
+                        error('Each component of funPForm_ph should be a function handle like @(obj,x)...');
+                    end
+                end
+                obj.funPForm_ph=fun;
+            else
+                error('funPForm_ph should be a 3D separable function, so the input must be a length 3 cell vector.');
+            end
+        end
         function funP=get.funP(obj)
-            funP={@(x)exp( -x.*x * (obj.L/2/obj.w)^2 );...
-                  @(y)exp( -y.*y * (obj.L/2/obj.w)^2 );...
-                  @(z)obj.T0*obj.P0};
+            funP={@(x)obj.T0*obj.funPForm_ph{1}(obj,obj.L/2*x);...
+                  @(y)obj.funPForm_ph{2}(obj,obj.L/2*y);...
+                  @(z)obj.funPForm_ph{3}(obj,obj.L/2*z)};
         end
-        function anaSol=get.anaSol(obj) % !!!!! this part not finished
-            anaSol=@(t,x,y,z)(obj.L/2)^3*obj.anaSolForm(obj,t*obj.T0,x*obj.L/2,y*obj.L/2,z*obj.L/2);
-        end
+        % anaSol
         function obj=set.anaSolForm(obj,fun)  % !!!!! this part not finished
             if isa(fun,'function_handle') && nargin(fun)==5
                 obj.anaSolForm=fun;               % fun should be a function of obj....
             else
                 error('fun should be a function handle: fun=@(obj,t,x,y,z)...');
             end
+        end
+        function anaSol=get.anaSol(obj) % !!!!! this part not finished
+            anaSol=@(t,x,y,z)(obj.L/2)^3*obj.anaSolForm(obj,t*obj.T0,x*obj.L/2,y*obj.L/2,z*obj.L/2);
         end
 % ====================== Definition of eq operator ============================
         function yes=eq(o1,o2)
@@ -112,7 +132,7 @@ classdef ProblemPars
         
     properties
         rho_0_ph;   % initial condition, should be a constant column vector 
-                    % or a column cell vector that contains a separable 3D function
+                    % or a column cell vector that contains a separable 3D function or a numeric scalar
                     % in each element.
                     % New format: can be a ROW cell vector val with val{i} satisfying the above format.
                     % rho_0=val{1}+val{2}+val{3}+.....
