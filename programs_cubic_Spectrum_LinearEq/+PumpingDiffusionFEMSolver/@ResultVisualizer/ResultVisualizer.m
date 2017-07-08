@@ -188,6 +188,7 @@ function lines=defaultLines()
            {zeros(1,200),linspace(-1,1,200),zeros(1,200),'yAxis'};
            {zeros(1,200),zeros(1,200),linspace(-1,1,200),'zAxis'};
            {linspace(-1,1,200),zeros(1,200),-0.99*ones(1,200),'(y=0,z=-0.99)'};
+           {linspace(-1,1,200),linspace(-1,1,200),linspace(-1,1,200),'(-1,-1,-1)->(1,1,1)'};
            {0,0,0,'centerPoint'};
            {0.5,0.5,0.5,'Point:(0.5,0.5,0.5)'};
            {1,1,1,'Point:(1,1,1)'};};

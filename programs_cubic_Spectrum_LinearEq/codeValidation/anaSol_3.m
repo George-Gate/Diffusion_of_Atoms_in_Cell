@@ -1,4 +1,4 @@
-% parameter set for analytical solution 2
+% parameter set for analytical solution 3
 % see .docx file for details
 
 
