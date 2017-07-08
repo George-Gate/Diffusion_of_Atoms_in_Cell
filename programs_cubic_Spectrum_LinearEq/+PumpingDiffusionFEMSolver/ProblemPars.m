@@ -49,6 +49,10 @@ classdef ProblemPars
         end
         
         function dimRho=get.dimRho(obj)
+            if ~( size(obj.matD,1)==size(obj.matD,2) && size(obj.matC,1)==size(obj.matD,1) ...
+               && size(obj.matC,1)==size(obj.matC,2))
+                error('The size of matC and matD is invalid!');
+            end
             dimRho=size(obj.matD,1);
         end
         function D=get.D(obj)
@@ -235,6 +239,8 @@ classdef ProblemPars
         
 % --------------------------------- Get functions of rho_0, rho_b, drho_b etc. -------------------------------
         function rho_0=get.rho_0(obj)
+            % call setter to check format again in case that dimRho changed.
+            obj.rho_0_ph=obj.rho_0_ph;  
             val=obj.rho_0_ph;
             if iscell(val) && isrow(val) && length(val)>1  % rho_0_ph is composed of many parts
                 rho_0=cell(1,length(val));
@@ -246,15 +252,23 @@ classdef ProblemPars
             end
         end
         function rho_b=get.rho_b(obj)
+            % call setter to check format again in case that dimRho changed.
+            obj.rho_b_ph=obj.rho_b_ph;  
             rho_b= Nondimensionalization_boundary(obj.rho_b_ph,  obj.L, (obj.L/2)^3, obj.dimRho);
         end
         function drho_b=get.drho_b(obj)
+            % call setter to check format again in case that dimRho changed.
+            obj.drho_b_ph=obj.drho_b_ph;  
             drho_b=Nondimensionalization_boundary(obj.drho_b_ph, obj.L, (obj.L/2)^4, obj.dimRho);
         end
         function robinA=get.robinA(obj)
+            % call setter to check format again in case that dimRho changed.
+            obj.robinA_ph=obj.robinA_ph;  
             robinA=Nondimensionalization_boundary(obj.robinA_ph, obj.L, (obj.L/2),   obj.dimRho);
         end
         function robinF=get.robinF(obj)
+            % call setter to check format again in case that dimRho changed.
+            obj.robinF_ph=obj.robinF_ph;  
             robinF=Nondimensionalization_boundary(obj.robinF_ph, obj.L, (obj.L/2)^4, obj.dimRho);
         end
     end
