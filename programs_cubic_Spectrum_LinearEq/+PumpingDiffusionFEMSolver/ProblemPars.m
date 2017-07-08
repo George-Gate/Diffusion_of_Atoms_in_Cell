@@ -110,6 +110,8 @@ classdef ProblemPars
         rho_0_ph;   % initial condition, should be a constant column vector 
                     % or a column cell vector that contains a separable 3D function
                     % in each element.
+                    % New format: can be a ROW cell vector val with val{i} satisfying the above format.
+                    % rho_0=val{1}+val{2}+val{3}+.....
         
         %-------------[Format of boundary condition]------------------
         % 1. A [dimRho x 1] constant vector, saying that the boundary value if independent of space 
@@ -142,14 +144,34 @@ classdef ProblemPars
     end
 
     methods
-% ---------------------------- set function for initial state -----------------------------------
+% ---------------------------- Set function for initial state -----------------------------------
         function obj=set.rho_0_ph(obj,val)
             errStr='The format of rho_0_ph is invalid.';
-            if isnumeric(val) && iscolumn(val)
+            if iscell(val) && isrow(val) && length(val)>1
+                valid=true;
+                for i=length(val)
+                    if ~obj.checkInitValFormat(val{i})
+                        valid=false;
+                        break;
+                    end
+                end
+            else
+                valid=obj.checkInitValFormat(val);
+            end
+            if valid
                 obj.rho_0_ph=val;
-            elseif iscell(val) && iscolumn(val)
+            else
+                error(errStr);
+            end
+        end
+        % Check whether a column vector val satisfies the initial value format.
+        % Used by set.rho_0_ph() method and getInitialState() method of class @FEMSolver3D
+        function valid=checkInitValFormat(obj,val)
+            if isnumeric(val) && iscolumn(val) && length(val)==obj.dimRho
+                valid=true; return;
+            elseif iscell(val) && iscolumn(val) && length(val)==obj.dimRho
                 % check form
-                for i=1:length(val)
+                for i=1:obj.dimRho
                     if isnumeric(val{i}) && isscalar(val{i})
                         % good
                     elseif iscell(val{i}) && isvector(val{i}) && length(val{i})==3
@@ -161,20 +183,19 @@ classdef ProblemPars
                             elseif isa(tmp{j},'function_handle') && nargin(tmp{j})==1
                                 % good
                             else
-                                error(errStr);
+                                valid=false; return;
                             end
                         end
                     else
-                        error(errStr);
+                        valid=false; return;
                     end
                 end
-                % set
-                obj.rho_0_ph=val;
+                valid=true; return;
             else
-                error(errStr);
+                valid=false; return;
             end
         end
-% --------------------------------- set functions of boundary conditions -------------------------------
+% --------------------------------- Set functions of boundary conditions -------------------------------
         function obj=set.boundaryType(obj,val)
             validType={'first','second','robin'};
             if ismember(val,validType)
@@ -214,7 +235,15 @@ classdef ProblemPars
         
 % --------------------------------- Get functions of rho_0, rho_b, drho_b etc. -------------------------------
         function rho_0=get.rho_0(obj)
-            rho_0=Nondimensionalization_init(obj.rho_0_ph,obj.L,(obj.L/2)^3);
+            val=obj.rho_0_ph;
+            if iscell(val) && isrow(val) && length(val)>1  % rho_0_ph is composed of many parts
+                rho_0=cell(1,length(val));
+                for i=1:length(val)
+                    rho_0{i}=Nondimensionalization_init(val{i},obj.L,(obj.L/2)^3);
+                end
+            else
+                rho_0=Nondimensionalization_init(val,obj.L,(obj.L/2)^3);
+            end
         end
         function rho_b=get.rho_b(obj)
             rho_b= Nondimensionalization_boundary(obj.rho_b_ph,  obj.L, (obj.L/2)^3, obj.dimRho);

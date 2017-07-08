@@ -41,14 +41,14 @@ function [  ] = compareWithAnaSol_line(obj,lineIDs)
             if isscalar(xList)
                 % 0D plot
                 plot(tList*pars.T0,8*sum(rho_num(:,:,iDim)-rho_ana(:,:,iDim),3));
-                ylabel(['$$L^3 \rho_',num2str(iDim),'$$'],'interpreter','latex');
+                ylabel(['$$L^3 \left( \rho_{\mathrm{N},',num2str(iDim),'} - \rho_{\mathrm{A},',num2str(iDim),'} \right) $$'],'interpreter','latex');
             else  % 1D plot
                 mesh(tList*pars.T0,xiList,8*sum((rho_num(:,:,iDim)-rho_ana(:,:,iDim)),3));
                 view([0 90]);box on;
                 colormap winter
                 colorbar;
                 ylabel('$$\xi$$','interpreter','latex');
-                zlabel(['$$L^3 \rho_',num2str(iDim),'$$'],'interpreter','latex');
+                zlabel(['$$L^3 \left( \rho_{\mathrm{N},',num2str(iDim),'} - \rho_{\mathrm{A},',num2str(iDim),'} \right) $$'],'interpreter','latex');
             end
             set(gca,'xlim',pars.T0*[min(tList(:)),max(tList(:))]);
             xlabel('time/s');

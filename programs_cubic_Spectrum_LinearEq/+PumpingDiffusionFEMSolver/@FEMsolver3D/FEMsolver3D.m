@@ -15,7 +15,7 @@ classdef FEMsolver3D < handle
     end
     
     properties
-        sampleRate=50;   % how many points to record per second in time evolution
+        sampleRate=100;   % how many points to record per second in time evolution
     end
     
     properties(Dependent)  % All link to coeffMatrix

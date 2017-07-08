@@ -43,14 +43,17 @@ problem.robinA_ph={ones(8);          % constant matrix
                    ones(8)};
            
 % ------------ Example for initial condition -------------------------
-problem.rho_0_ph={1;    % constant
-                  2;    
-                  3;
-                  {4,5,6};  
-                  7;
-                  {@(x)x,@(y)y.^2,4};    % separable 3D function
-                  {@(x)x;@(y)y.^2;@(z)z};
-                  0};
-problem.rho_0_ph=ones(8,1)/8/L^3;  % constant
+rho_0_1={1;    % constant
+         2;    
+         3;
+         {4,5,6};  
+         7;
+         {@(x)x,@(y)y.^2,4};    % separable 3D function
+         {@(x)x;@(y)y.^2;@(z)z};
+         0};
+rho_0_2=ones(8,1)/8/L^3;  % constant
+problem.rho_0_ph=rho_0_1;
+problem.rho_0_ph=rho_0_2;
+problem.rho_0_ph={rho_0_1,rho_0_1,rho_0_2};  % sum of several parts
 
 
