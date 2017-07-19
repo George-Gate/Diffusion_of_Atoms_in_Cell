@@ -1,6 +1,24 @@
 classdef FEMsolver3D < handle
     %FEMsolver3D   FEM simulator
     
+% --------------- Version Check ---------------------------
+    properties(Constant)
+        classVersion='0.1';
+    end
+    properties(SetAccess=private)
+        objectVersion='0.1';
+    end
+    
+    methods
+        function set.objectVersion(obj,val)
+            if ~strcmp(val,obj.classVersion)
+                warning('objectVersion ~= classVersion, the definition of class may changed.');
+            end
+            obj.objectVersion=val;
+        end
+    end
+% --------------- End of Version Check -------------------
+
     properties(Access=private)
         coeffMatrix;    % @CoeffMatrixGenerator object
     end
@@ -55,9 +73,11 @@ classdef FEMsolver3D < handle
         end
         
         % Time evolution
-        timeEvolution( obj,filename, u0 )
+        timeEvolution( obj,filename, u0 );
         % calc the expansion coeffs of initial state under the base function
         [ u0 ] = getInitialState(obj);
+        
+
         
         % Save simulation result and parameters to file.
         [ filename ] = saveResultToFile( obj, filename );

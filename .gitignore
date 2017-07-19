@@ -56,3 +56,11 @@ programs_cubic_Spectrum_LinearEq/codegen/*
 programs_cubic_Spectrum_LinearEq/figs/*
 *.tmp
 *.mexw64
+programs_cubic_Spectrum_LinearEq/codeValidation/anaSol_2, 6x6x6, maxOrder=6_diary.txt
+programs_cubic_Spectrum_LinearEq/Simulation_Results/parSet3, 2x2x1, maxOrder=14_diary.txt
+programs_cubic_Spectrum_LinearEq/Simulation_Results/parSet3, 8x8x8, maxOrder=5_diary.txt
+programs_cubic_Spectrum_LinearEq/codeValidation/anaSol_2, 6x6x6, maxOrder=8_diary.txt
+programs_cubic_Spectrum_LinearEq/codeValidation/anaSol_2, 8x8x8, maxOrder=8_diary.txt
+programs_cubic_Spectrum_LinearEq/Simulation_Results/parSet1, 1x1x1, maxOrder=25_diary.txt
+programs_cubic_Spectrum_LinearEq/Simulation_Results/parSet1, 6x6x6, maxOrder=6_diary.txt
+programs_cubic_Spectrum_LinearEq/Simulation_Results/parSet1, 8x8x8, maxOrder=3_diary.txt

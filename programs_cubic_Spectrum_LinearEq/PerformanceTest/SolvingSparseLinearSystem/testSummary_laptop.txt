@@ -1,0 +1,250 @@
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 1x1x1, maxOrder=15
+tol=1E-06
+Number of non-zero elements in MM: 830584,  0.11%,  30.8 per row on average.
+Number of non-zero elements in H: 24789324,  3.40%,  918.1 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   0.26 | 1.54E-18 |       0 | Direct Solver
+  2 |   0.07 | 2.30E-18 |       0 | Direct Solver + LU
+  3 |   0.21 | 5.54E-09 |      84 | pcg
+  4 |   0.07 | 2.56E-18 |       1 | pcg + ichol
+  5 |   0.58 | 5.81E-09 |      66 | pcg + ichol(ict)
+  6 |   0.21 | 3.27E-09 |      73 | minres
+  7 |   0.07 | 2.56E-18 |       1 | minres + ichol
+  8 |   0.23 | 5.55E-09 |      85 | symmlq
+  9 |   0.30 | 6.12E-09 |      95 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 1x1x1, maxOrder=20
+tol=1E-06
+Number of non-zero elements in MM: 1906624,  0.05%,  29.8 per row on average.
+Number of non-zero elements in H: 91031414,  2.22%,  1422.4 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   0.96 | 2.21E-18 |       0 | Direct Solver
+  2 |   0.30 | 2.21E-18 |       0 | Direct Solver + LU
+  3 |   0.77 | 1.03E-09 |     139 | pcg
+  4 |   0.25 | 1.15E-19 |       1 | pcg + ichol
+  5 |   1.07 | 4.75E-09 |      47 | pcg + ichol(ict)
+  6 |   0.54 | 4.19E-09 |      71 | minres
+  7 |   0.26 | 1.15E-19 |       1 | minres + ichol
+  8 |   0.82 | 1.15E-09 |     138 | symmlq
+  9 |   0.73 | 2.95E-09 |      92 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 1x1x1, maxOrder=22
+tol=1E-06
+Number of non-zero elements in MM: 2515456,  0.03%,  29.5 per row on average.
+Number of non-zero elements in H: 141379716,  1.95%,  1659.7 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   1.32 | 1.30E-18 |       0 | Direct Solver
+  2 |   0.46 | 1.94E-18 |       0 | Direct Solver + LU
+  3 |   0.99 | 2.77E-09 |     126 | pcg
+  4 |   0.40 | 2.57E-20 |       1 | pcg + ichol
+  5 |   1.62 | 3.56E-09 |      55 | pcg + ichol(ict)
+  6 |   0.79 | 3.14E-09 |      75 | minres
+  7 |   0.41 | 2.57E-20 |       1 | minres + ichol
+  8 |   1.09 | 2.74E-09 |     132 | symmlq
+  9 |   1.15 | 1.87E-09 |     112 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 1x1x1, maxOrder=23
+tol=1E-06
+Number of non-zero elements in MM: 2863288,  0.03%,  29.4 per row on average.
+Number of non-zero elements in H: 173670568,  1.83%,  1784.2 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   1.77 | 7.72E-19 |       0 | Direct Solver
+  2 |   0.59 | 1.54E-18 |       0 | Direct Solver + LU
+  3 |   1.27 | 9.51E-10 |     144 | pcg
+  4 |   0.50 | 7.29E-21 |       1 | pcg + ichol
+  5 |   2.05 | 1.54E-09 |      62 | pcg + ichol(ict)
+  6 |   0.94 | 2.04E-09 |      74 | minres
+  7 |   0.51 | 7.29E-21 |       1 | minres + ichol
+  8 |   1.36 | 9.48E-10 |     147 | symmlq
+  9 |   1.28 | 1.79E-09 |     102 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 2x1x1, maxOrder=16
+tol=1E-06
+Number of non-zero elements in MM: 1980000,  0.05%,  31.2 per row on average.
+Number of non-zero elements in H: 104181550,  2.58%,  1641.0 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   0.96 | 1.20E-17 |       0 | Direct Solver
+  2 |   0.30 | 1.20E-17 |       0 | Direct Solver + LU
+  3 |   1.51 | 1.57E-08 |     324 | pcg
+  4 |   0.31 | 6.35E-10 |       5 | pcg + ichol
+  5 |   1.86 | 5.97E-09 |      83 | pcg + ichol(ict)
+  6 |   0.89 | 6.76E-09 |     145 | minres
+  7 |   0.32 | 6.35E-10 |       5 | minres + ichol
+  8 |   1.55 | 8.01E-09 |     310 | symmlq
+  9 |   1.13 | 2.38E-09 |     162 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 2x2x2, maxOrder=10
+tol=1E-06
+Number of non-zero elements in MM: 2000376,  0.07%,  36.5 per row on average.
+Number of non-zero elements in H: 65624986,  2.18%,  1196.0 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   0.82 | 5.67E-17 |       0 | Direct Solver
+  2 |   0.19 | 2.52E-17 |       0 | Direct Solver + LU
+  3 |   0.49 | 2.02E-08 |      90 | pcg
+  4 |   0.43 | 5.26E-09 |      24 | pcg + ichol
+  5 |   4.24 | 3.42E-09 |     176 | pcg + ichol(ict)
+  6 |   0.43 | 6.75E-09 |      65 | minres
+  7 |   0.46 | 5.26E-09 |      24 | minres + ichol
+  8 |   0.53 | 7.07E-09 |      89 | symmlq
+  9 |   1.43 | 2.90E-09 |     243 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 4x2x2, maxOrder=10
+tol=1E-06
+Number of non-zero elements in MM: 3969000,  0.03%,  37.1 per row on average.
+Number of non-zero elements in H: 130881150,  1.15%,  1224.8 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   1.91 | 6.74E-17 |       0 | Direct Solver
+  2 |   0.40 | 5.89E-17 |       0 | Direct Solver + LU
+  3 |   2.86 | 9.10E-09 |     353 | pcg
+  4 |   1.63 | 9.93E-09 |      61 | pcg + ichol
+  5 |   6.44 | 3.48E-09 |     131 | pcg + ichol(ict)
+  6 |   1.46 | 9.39E-09 |     145 | minres
+  7 |   1.43 | 9.93E-09 |      61 | minres + ichol
+  8 |   2.87 | 7.81E-09 |     328 | symmlq
+  9 |   2.68 | 1.05E-09 |     245 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 6x2x2, maxOrder=10
+tol=1E-06
+Number of non-zero elements in MM: 5937624,  0.02%,  37.4 per row on average.
+Number of non-zero elements in H: 196060714,  0.78%,  1234.3 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   3.59 | 1.89E-17 |       0 | Direct Solver
+  2 |   0.65 | 2.46E-17 |       0 | Direct Solver + LU
+  3 |   6.85 | 1.02E-08 |     523 | pcg
+  4 |   3.47 | 5.97E-09 |      84 | pcg + ichol
+  5 |   9.41 | 2.91E-09 |     120 | pcg + ichol(ict)
+  6 |   3.07 | 7.13E-09 |     186 | minres
+  7 |   2.90 | 5.97E-09 |      84 | minres + ichol
+  8 |   6.70 | 7.04E-09 |     512 | symmlq
+  9 |   4.97 | 1.77E-09 |     272 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 4x3x2, maxOrder=10
+tol=1E-06
+Number of non-zero elements in MM: 5922000,  0.02%,  37.6 per row on average.
+Number of non-zero elements in H: 175947650,  0.71%,  1117.3 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   3.12 | 3.90E-17 |       0 | Direct Solver
+  2 |   0.54 | 6.34E-17 |       0 | Direct Solver + LU
+  3 |   5.39 | 8.09E-09 |     408 | pcg
+  4 |   3.60 | 1.02E-08 |      86 | pcg + ichol
+  5 |   8.26 | 3.35E-09 |     104 | pcg + ichol(ict)
+  6 |   3.15 | 7.60E-09 |     195 | minres
+  7 |   2.98 | 1.02E-08 |      86 | minres + ichol
+  8 |   5.02 | 9.83E-09 |     381 | symmlq
+  9 |   2.57 | 6.11E-09 |     134 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 8x8x8, maxOrder=3
+tol=1E-06
+Number of non-zero elements in MM: 2197000,  0.14%,  55.9 per row on average.
+Number of non-zero elements in H: 10435750,  0.68%,  265.5 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   0.43 | 1.81E-18 |       0 | Direct Solver
+  2 |   0.05 | 2.07E-18 |       0 | Direct Solver + LU
+  3 |   0.39 | 5.13E-10 |      88 | pcg
+  4 |   0.35 | 9.08E-10 |      27 | pcg + ichol
+  5 |   1.26 | 9.31E-10 |      72 | pcg + ichol(ict)
+  6 |   0.32 | 8.19E-10 |      66 | minres
+  7 |   0.33 | 9.08E-10 |      27 | minres + ichol
+  8 |   0.41 | 4.47E-10 |      87 | symmlq
+  9 |   0.80 | 6.79E-10 |     152 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 12x12x12, maxOrder=3
+tol=1E-06
+Number of non-zero elements in MM: 7301384,  0.05%,  58.4 per row on average.
+Number of non-zero elements in H: 34681574,  0.22%,  277.5 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   2.09 | 3.67E-19 |       0 | Direct Solver
+  2 |   0.22 | 3.67E-19 |       0 | Direct Solver + LU
+  3 |   1.41 | 2.06E-10 |     105 | pcg
+  4 |   1.19 | 3.40E-10 |      29 | pcg + ichol
+  5 |   3.49 | 2.38E-10 |      63 | pcg + ichol(ict)
+  6 |   1.11 | 2.28E-10 |      75 | minres
+  7 |   1.03 | 3.40E-10 |      29 | minres + ichol
+  8 |   1.50 | 2.18E-10 |     104 | symmlq
+  9 |   2.38 | 1.28E-10 |     148 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
+
+
+========================[Test Summary]===========================
+Test host: GeorgeGate-E440
+Basis Configuration: 15x15x15, maxOrder=3
+tol=1E-06
+Number of non-zero elements in MM: 14172488,  0.02%,  59.5 per row on average.
+Number of non-zero elements in H: 67319318,  0.12%,  282.5 per row on average.
+-----------------------------------------------------
+ ID |  Time  |    Err   | N iter. |   Description              
+----+--------+----------+---------+------------------
+  1 |   5.81 | 2.13E-19 |       0 | Direct Solver
+  2 |   0.57 | 1.99E-19 |       0 | Direct Solver + LU
+  3 |   3.26 | 5.23E-11 |     114 | pcg
+  4 |   2.56 | 7.75E-11 |      31 | pcg + ichol
+  5 |   6.66 | 1.02E-10 |      58 | pcg + ichol(ict)
+  6 |   2.43 | 1.15E-10 |      76 | minres
+  7 |   2.20 | 7.75E-11 |      31 | minres + ichol
+  8 |   3.28 | 5.30E-11 |     113 | symmlq
+  9 |   3.79 | 6.49E-11 |     108 | symmlq + diag(diag(MM))
+=======================[End of Summary]==========================
